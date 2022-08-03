@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "start": "tsc && node dist/app",
+    "dev": "tsc && nodemon dist/app",
+    "build": "tsc",
+    "test": "tsc && jest",
+    "postinstall": "npm run build"
+  },
+  "name": "api",
+  "version": "1.0.0",
+  "description": "A nodejs backend for communication between the user and chatbot",
+  "main": "index.js",
+  "author": "Publicis Sapient Team 4",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "mongodb": "^4.8.1",
+    "mongoose": "^6.5.0",
+    "nodemon": "^2.0.19"
+  }
+}
