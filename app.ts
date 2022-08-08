@@ -5,6 +5,6 @@ import connect from "./config/mongoConfig";
 connect();
 
 //Check for open connection to database
-connection.once("open", () => {
+connection.once("open", async () => {
     console.log("Connected to database");
 });
