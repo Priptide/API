@@ -1,6 +1,5 @@
 import { connection } from "mongoose";
 import connect from "./config/mongoConfig";
-import LexService from "./services/lex";
 
 //Connect to mongodb
 connect();

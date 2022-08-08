@@ -1,8 +1,4 @@
-import {
-  RecognizeTextCommand,
-  RecognizeUtteranceCommand,
-  StartConversationCommand,
-} from "@aws-sdk/client-lex-runtime-v2";
+import { RecognizeTextCommand } from "@aws-sdk/client-lex-runtime-v2";
 import lexClient from "../config/awsConfig";
 
 async function start_conversation(message: string) {
