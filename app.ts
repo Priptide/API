@@ -20,6 +20,16 @@ function start_server() {
     //Add lex too the routes
     app.use("/lex", lex_routes);
 
+    //Setup routing for errors
+    app.use((error: any, req: any, res: any, next: any) => {
+        res.status(error.status || 500);
+
+        res.json({
+            status: error.status || 500,
+            message: error.message,
+        });
+    });
+
     // start the express server
     app.listen(port, () => {
         console.log(`server started at http://localhost:${port}`);
