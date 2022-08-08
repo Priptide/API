@@ -54,8 +54,6 @@ describe("Lex_Send_Message", () => {
     //         "test_session"
     //     );
 
-    //     console.log(data);
-
     //     //Expect data to be provided
     //     expect(data).toBeDefined();
     // });
