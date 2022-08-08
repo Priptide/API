@@ -4,8 +4,8 @@ on: [pull_request, push]
 env:
     AWS_ACCESS_KEY: ${{ secrets.AWS_KEY_ID }}
     AWS_SECRET_KEY: ${{ secrets.AWS_SECRET }}
-    BOT_ID: P76TEI6VLR
-    BOT_ALIAS_ID: TSTALIASID
+    BOT_ID: ${{ secrets.BOT_ID }}
+    BOT_ALIAS_ID: ${{ secrets.BOT_ALIAS_ID }}
     AWS_REGION: us-east-1
     LOCALE_ID: en_GB
 

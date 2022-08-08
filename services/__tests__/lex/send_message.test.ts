@@ -47,16 +47,16 @@ describe("Lex_Send_Message", () => {
         }
     });
 
-    test("send valid message", async () => {
-        //Send to the lex service a new message and our test session id
-        const data = await LexService.send_message(
-            "How to connect to wifi",
-            "test_session"
-        );
+    // test("send valid message", async () => {
+    //     //Send to the lex service a new message and our test session id
+    //     const data = await LexService.send_message(
+    //         "How to connect to wifi",
+    //         "test_session"
+    //     );
 
-        console.log(data);
+    //     console.log(data);
 
-        //Expect data to be provided
-        expect(data).toBeDefined();
-    });
+    //     //Expect data to be provided
+    //     expect(data).toBeDefined();
+    // });
 });
