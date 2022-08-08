@@ -12,15 +12,13 @@ connection.once("open", async () => {
 //server setup 
 
 import express from "express";
+import router from "./routes/routes";
 const app = express();
 
 //port set-up
  const port = process.env.SERVER_PORT;
 
-app.get( "/", ( req, res ) => {
-    // render the index template
-    res.send("hello");
-} );
+ app.use("/api",router)
 
 // start the express server
 app.listen( port, () => {
