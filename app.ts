@@ -6,5 +6,5 @@ connect();
 
 //Check for open connection to database
 connection.once("open", async () => {
-  console.log("Connected to database");
+    console.log("Connected to database");
 });
