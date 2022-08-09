@@ -60,6 +60,9 @@ describe("Lex_Send_Message", () => {
         }
     });
 
+    /**
+     * Currently unused whilst there are issues with the overall AWS service on GitHub actions.
+     */
     // test("send valid message", async () => {
     //     //Create a new
     //     const recordData: Record = {

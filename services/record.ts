@@ -56,7 +56,7 @@ async function find_or_create(
                 session_id: session_id,
             });
 
-            //If we can't find the record or it is now currently inactive then return a new record
+            //If we can't find the record or it is now currently inactive then return a new record.
             if (!lookup_record || !lookup_record.is_active)
                 return create(language, name ?? "", uuid);
             else
@@ -72,6 +72,7 @@ async function find_or_create(
                 is_active: true,
             });
 
+            //If we can't find any active record then create a new active record.
             if (!lookup_record) return create(language, name ?? "", uuid);
             else
                 return {
