@@ -1,6 +1,7 @@
-import express from "express"
-import RecordModel, {Record} from "../models/record"
+import RecordModel, { Record } from "../models/record";
 
+
+//Inserting a record
 async function insert_record(uuid: string, name: string, language: string){
     const data:Record = {
         UUID: uuid,
@@ -15,8 +16,9 @@ async function insert_record(uuid: string, name: string, language: string){
     return {id: record._id};
 }
 
-function get_record(){
-    RecordModel.find({})
+//Finding a record
+async function find_record(){
+    await RecordModel.find({})
     .then(res =>{
         console.log({res});
     })
@@ -25,4 +27,15 @@ function get_record(){
     })
 }
 
-export default {insert_record, get_record}; 
+// Getting a record by UUID
+async function find_byId_record( uuid : String){
+    await RecordModel.findById(uuid)
+    .then(res =>{
+        console.log({res});
+    })
+    .catch(err =>{
+        console.log(err);
+    })
+}
+
+export default {insert_record, find_record, find_byId_record}; 
