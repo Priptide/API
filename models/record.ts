@@ -5,7 +5,7 @@ export interface Record {
     _id?: number;
     UUID: string;
     chat: Chat;
-    name: string;
+    name?: string;
     session_id: string;
     is_active: boolean;
 }
@@ -26,6 +26,9 @@ const recordSchema = new Schema<Record>({
     UUID: {
         type: String,
         required: true,
+    },
+    name: {
+        type: String,
     },
     chat: [
         {

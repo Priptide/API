@@ -24,6 +24,9 @@ AWS_SECRET_KEY=<insert aws secret key here>
 BOT_ID=<insert bot id here>
 BOT_ALIAS_ID=<insert bot alias id here>
 LOCALE_ID=en_GB
+
+SERVER_PORT=3000
+
 ```
 
 ----
