@@ -1,23 +1,23 @@
 import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 
-interface Record {
-    _id: number;
-    UUID: String;
+export interface Record {
+    _id?: number;
+    UUID: string;
     chat: Chat;
-    name: String;
-    session_id: String;
+    name: string;
+    session_id: string;
     is_active: boolean;
 }
 
-interface Chat {
-    _id: number;
-    language: String;
+export interface Chat {
+    _id?: number;
+    language: string;
     conversation: Array<Message>;
 }
 
-interface Message {
-    text: String;
+export interface Message {
+    text: string;
     time: Date;
     is_bot: boolean;
 }

@@ -61,10 +61,24 @@ describe("Lex_Send_Message", () => {
     });
 
     // test("send valid message", async () => {
+    //     //Create a new
+    //     const recordData: Record = {
+    //         UUID: "12313",
+    //         chat: {
+    //             language: "en_gb",
+    //             conversation: [],
+    //         },
+    //         name: "TestName",
+    //         session_id: "TestSession",
+    //         is_active: true,
+    //     };
+
+    //     const recordModel = await new RecordModel(recordData).save();
+
     //     //Send to the lex service a new message and our test session id
     //     const data = await LexService.send_message(
     //         "How to connect to wifi",
-    //         "test_session"
+    //         recordModel.session_id
     //     );
 
     //     //Expect data to be provided
