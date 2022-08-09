@@ -8,7 +8,7 @@ const lex_routes = express.Router();
 //Route for sending a message to lex
 lex_routes.post("/send", async (req, res, next) => {
     try {
-        //TODO: Create a new record for this chat
+        //Create a new record for this chat or find the current one.
         const { id, session_id, uuid } = await RecordService.find_or_create(
             req.body.language ?? "en_gb",
             req.body.name,
@@ -21,6 +21,8 @@ lex_routes.post("/send", async (req, res, next) => {
             req.body.message ?? "",
             session_id
         );
+
+        //If there is a message send it back or return an error otherwise.
         if (message) {
             res.status(200).json({
                 uuid: uuid,
