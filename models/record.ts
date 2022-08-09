@@ -7,6 +7,8 @@ interface Record {
     UUID: String;
     chat: Chat;
     name: String;
+    session_id: String;
+    is_active: boolean;
 }
 
 interface Chat {
@@ -38,6 +40,15 @@ const recordSchema = new Schema<Record>({
             ],
         },
     ],
+    session_id: {
+        type: String,
+        required: true,
+    },
+    is_active: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
 });
 
 export default model("Record", recordSchema);
