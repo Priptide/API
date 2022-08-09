@@ -29,10 +29,14 @@ async function find_record() {
 }
 
 // Getting a record by UUID
-async function find_byId_record(uuid: String) {
-    await RecordModel.findById(uuid)
+async function find_byId_record(uuid: string) {
+
+    if (!uuid)  throw new Error("Missing uuid")
+
+    await RecordModel.findOne({UUID: uuid})
         .then((res) => {
-            console.log({ res });
+            //console.log({ res });
+            return res;
         })
         .catch((err) => {
             console.log(err);

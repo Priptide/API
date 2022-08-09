@@ -1,8 +1,8 @@
 import express from "express";
 import { connection } from "mongoose";
 import connect from "./config/mongoConfig";
+import router from "./routes/actions";
 import lex_routes from "./routes/lex";
-import router from "./routes/routes";
 
 function start_server() {
     //server setup
