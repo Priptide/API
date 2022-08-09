@@ -1,5 +1,6 @@
 import { RecognizeTextCommand } from "@aws-sdk/client-lex-runtime-v2";
 import lexClient from "../config/awsConfig";
+import RecordModel from "../models/record";
 
 //Return the full list of possible intents
 async function send_message(message: string, sessionId: string) {
@@ -8,6 +9,12 @@ async function send_message(message: string, sessionId: string) {
 
     //Check we have a session id
     if (!sessionId) throw new Error("Missing session id");
+
+    //Get the current record
+    const record = await RecordModel.findOne({ session_id: sessionId });
+
+    //Check there is a valid record
+    if (!record) throw new Error("Invalid session id");
 
     //Spin up a new client
     const client = lexClient();
@@ -38,6 +45,7 @@ async function get_main_intent(message: string, sessionId: string) {
         throw new Error("Server error: No Intentions found!");
     }
 
+    //Return the first intent
     return intentions[0];
 }
 

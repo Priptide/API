@@ -34,7 +34,7 @@ describe("Lex_Send_Message", () => {
         }
     });
 
-    test("send invalid session id", async () => {
+    test("send empty session id", async () => {
         try {
             //Try send with empty session id
             await LexService.send_message("my_message", "");
@@ -47,11 +47,38 @@ describe("Lex_Send_Message", () => {
         }
     });
 
+    test("send invalid session id", async () => {
+        try {
+            //Try send with empty session id
+            await LexService.send_message("my_message", "test_id");
+
+            // Fail test if above expression doesn't throw anything.
+            expect(true).toBe(false);
+        } catch (error: any) {
+            //Check we have sent the expect error
+            expect(error.message).toBe("Invalid session id");
+        }
+    });
+
     // test("send valid message", async () => {
+    //     //Create a new
+    //     const recordData: Record = {
+    //         UUID: "12313",
+    //         chat: {
+    //             language: "en_gb",
+    //             conversation: [],
+    //         },
+    //         name: "TestName",
+    //         session_id: "TestSession",
+    //         is_active: true,
+    //     };
+
+    //     const recordModel = await new RecordModel(recordData).save();
+
     //     //Send to the lex service a new message and our test session id
     //     const data = await LexService.send_message(
     //         "How to connect to wifi",
-    //         "test_session"
+    //         recordModel.session_id
     //     );
 
     //     //Expect data to be provided

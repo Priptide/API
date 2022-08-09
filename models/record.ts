@@ -1,22 +1,23 @@
-import { Timestamp } from "mongodb";
 import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 
 export interface Record {
     _id?: number;
-    UUID: String;
+    UUID: string;
     chat: Chat;
-    name?: String;
+    name?: string;
+    session_id: string;
+    is_active: boolean;
 }
 
 export interface Chat {
     _id?: number;
-    language: String;
+    language: string;
     conversation: Array<Message>;
 }
 
 export interface Message {
-    text: String;
+    text: string;
     time: Date;
     is_bot: boolean;
 }
@@ -41,6 +42,15 @@ const recordSchema = new Schema<Record>({
             ],
         },
     ],
+    session_id: {
+        type: String,
+        required: true,
+    },
+    is_active: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
 });
 
 export default model("Record", recordSchema);
