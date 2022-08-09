@@ -16,7 +16,13 @@ async function insert_record(uuid: string, name: string, language: string){
 }
 
 function get_record(){
-
+    RecordModel.find({})
+    .then(res =>{
+        console.log({res});
+    })
+    .catch(err =>{
+        console.log(err);
+    })
 }
 
 export default {insert_record, get_record}; 
