@@ -1,8 +1,7 @@
+import express from "express";
 import { connection } from "mongoose";
 import connect from "./config/mongoConfig";
-import express from "express";
 import router from "./routes/routes";
-import RecordService from "./services/record";
 
 function start_server() {
     //server setup
@@ -26,6 +25,9 @@ connect();
 //Check for open connection to database
 connection.once("open", async () => {
     console.log("Connected to database");
-    RecordService.insert_record("test_id", "siana", "en_gb");
+    
+    
     start_server();
+    //RecordService.get_record();
+    //RecordService.insert_record("test_id", "siana", "en_gb");
 });
