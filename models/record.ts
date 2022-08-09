@@ -36,18 +36,16 @@ const recordSchema = new Schema<Record, RecordModel, RecordMethods>({
     name: {
         type: String,
     },
-    chat: [
-        {
-            language: { type: String, required: true },
-            conversation: [
-                {
-                    text: { type: String, required: true },
-                    time: { type: Date, required: true },
-                    is_bot: { type: Boolean, required: true },
-                },
-            ],
-        },
-    ],
+    chat: {
+        language: { type: String, required: true },
+        conversation: [
+            {
+                text: { type: String, required: true },
+                time: { type: Date, required: true },
+                is_bot: { type: Boolean, required: true },
+            },
+        ],
+    },
     session_id: {
         type: String,
         required: true,

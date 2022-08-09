@@ -31,19 +31,26 @@ async function send_message(message: string, sessionId: string) {
     //Attempt to get the data required from the AWS lex server
     const data = await client.send(command);
 
-    //Add user message to our record.
-
-    //Add lex message too our record.
-
     //Set the local variables from the data
     const interpretations = data["interpretations"];
-    var messages;
+    var local_message;
 
-    if (data["messages"]) message = data["messages"][0]["content"] ?? "";
+    //Add user message to our record.
+    record.add_message(false, message);
+
+    if (data["messages"]) {
+        local_message = data["messages"][0]["content"] ?? "";
+
+        //Add lex message too our record.
+        record.add_message(true, local_message);
+    }
+
+    //Save the record model.
+    await record.save();
 
     //Return the messages and list of possible interpretations
     return {
-        message: messages,
+        message: local_message,
         interpretations: interpretations,
     };
 }
