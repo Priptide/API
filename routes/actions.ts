@@ -33,9 +33,8 @@ actions_routes.get("/actions/getuuid", async (req, res, next) => {
 
 actions_routes.get("/actions/testdrive-click" , async (req, res, next) => {
     try {
-        
-        console.log("2");
-        
+
+        res.status(200).send('https://www.ford.co.uk/shop/test-drive')
     } catch (error: any) {
         //Check if it is a known error.
         if (error.message == "Missing session id") {
@@ -54,7 +53,7 @@ actions_routes.get("/actions/testdrive-click" , async (req, res, next) => {
 actions_routes.get("/actions/book-service-click" , async (req, res, next) => {
     try {
         
-        console.log("1");
+        res.status(200).send('https://www.ford.co.uk/support/book-a-service/dealer-step')
         
     } catch (error: any) {
         //Check if it is a known error.
@@ -73,7 +72,7 @@ actions_routes.get("/actions/book-service-click" , async (req, res, next) => {
 actions_routes.get("/actions/price-comp-click" , async (req, res, next) => {
     try {
         
-    console.log("0");
+        res.status(200).send('http://www.compare.ford.co.uk/home?kee=380519')
         
     } catch (error: any) {
         //Check if it is a known error.
