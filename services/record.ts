@@ -4,7 +4,7 @@ import { generateSessionId, generateUUID } from "../utils/cryptoGeneration";
 //Inserting a record
 async function create(language: string, uuid?: string, name?: string) {
     const data: Record = {
-        UUID: uuid ?? (await generateUUID()),
+        UUID: uuid ? uuid : await generateUUID(),
         chat: {
             language: language,
             conversation: [],

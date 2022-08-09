@@ -17,16 +17,16 @@ lex_routes.post("/send", async (req, res, next) => {
         );
 
         //Get all possible intentions.
-        const intentions = await LexService.send_message(
+        const { message, interpretations } = await LexService.send_message(
             req.body.message ?? "",
             session_id
         );
-        if (intentions && intentions.length > 0) {
+        if (message) {
             res.status(200).json({
                 uuid: uuid,
                 session_id: session_id,
-                message: intentions[0].intent?.name,
-                intentions: intentions,
+                message: message,
+                intentions: interpretations,
             });
         } else {
             res.status(500).json({
