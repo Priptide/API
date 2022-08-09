@@ -18,6 +18,8 @@ lex_routes.post("/send", async (req, res, next) => {
             error.status = 401;
         } else if (error.message == "No valid message") {
             error.status = 401;
+        } else if (error.message == "Invalid session id") {
+            error.status = 401;
         }
 
         next(error);

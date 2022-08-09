@@ -1,4 +1,3 @@
-import { Timestamp } from "mongodb";
 import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 
@@ -19,7 +18,7 @@ interface Chat {
 
 interface Message {
     text: String;
-    time: Timestamp;
+    time: Date;
     is_bot: boolean;
 }
 
@@ -34,7 +33,7 @@ const recordSchema = new Schema<Record>({
             conversation: [
                 {
                     text: { type: String, required: true },
-                    time: { type: Timestamp, required: true },
+                    time: { type: Date, required: true },
                     is_bot: { type: Boolean, required: true },
                 },
             ],

@@ -10,7 +10,6 @@ export default {
     connect: async () => {
         mongod = await MongoMemoryServer.create();
         const uri = await mongod.getUri();
-
         await mongoose.connect(uri);
     },
 

@@ -34,7 +34,7 @@ describe("Lex_Send_Message", () => {
         }
     });
 
-    test("send invalid session id", async () => {
+    test("send empty session id", async () => {
         try {
             //Try send with empty session id
             await LexService.send_message("my_message", "");
@@ -44,6 +44,19 @@ describe("Lex_Send_Message", () => {
         } catch (error: any) {
             //Check we have sent the expect error
             expect(error.message).toBe("Missing session id");
+        }
+    });
+
+    test("send invalid session id", async () => {
+        try {
+            //Try send with empty session id
+            await LexService.send_message("my_message", "test_id");
+
+            // Fail test if above expression doesn't throw anything.
+            expect(true).toBe(false);
+        } catch (error: any) {
+            //Check we have sent the expect error
+            expect(error.message).toBe("Invalid session id");
         }
     });
 
