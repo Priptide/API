@@ -1,8 +1,8 @@
-import mongoose, { Model, model } from "mongoose";
+import mongoose, { Model, model, Types } from "mongoose";
 const { Schema } = mongoose;
 
 export interface Record {
-    _id?: number;
+    _id?: Types.ObjectId;
     UUID: string;
     chat: Chat;
     name?: string;
@@ -11,7 +11,7 @@ export interface Record {
 }
 
 export interface Chat {
-    _id?: number;
+    _id?: Types.ObjectId;
     language: string;
     conversation: Array<Message>;
 }
