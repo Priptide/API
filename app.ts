@@ -22,6 +22,8 @@ function start_server() {
 
     //Setup routing for errors
     app.use((error: any, req: any, res: any, next: any) => {
+        console.log(error.stack);
+
         res.status(error.status || 500);
 
         res.json({
@@ -42,9 +44,5 @@ connect();
 //Check for open connection to database
 connection.once("open", async () => {
     console.log("Connected to database");
-    
-    
     start_server();
-    //RecordService.get_record();
-    //RecordService.insert_record("test_id", "siana", "en_gb");
 });

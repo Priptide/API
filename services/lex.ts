@@ -31,22 +31,28 @@ async function send_message(message: string, sessionId: string) {
     //Attempt to get the data required from the AWS lex server
     const data = await client.send(command);
 
-    //Return the list of possible interpretations
-    return data["interpretations"];
-}
+    //Set the local variables from the data
+    const interpretations = data["interpretations"];
+    var local_message;
 
-//Returns only the single most likely intent
-async function get_main_intent(message: string, sessionId: string) {
-    //Get all possible intentions
-    const intentions = await send_message(message, sessionId);
+    //Add user message to our record.
+    record.add_message(false, message);
 
-    //If there is no intensions or the list is empty return an error
-    if (!intentions || intentions.length == 0) {
-        throw new Error("Server error: No Intentions found!");
+    if (data["messages"]) {
+        local_message = data["messages"][0]["content"] ?? "";
+
+        //Add lex message too our record.
+        record.add_message(true, local_message);
     }
 
-    //Return the first intent
-    return intentions[0];
+    //Save the record model.
+    await record.save();
+
+    //Return the messages and list of possible interpretations
+    return {
+        message: local_message,
+        interpretations: interpretations,
+    };
 }
 
-export default { send_message, get_main_intent };
+export default { send_message };
