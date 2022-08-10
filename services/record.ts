@@ -1,15 +1,20 @@
 import RecordModel, { Record } from "../models/record";
 import { generateSessionId, generateUUID } from "../utils/cryptoGeneration";
+import { Types } from "mongoose";
 
 //Inserting a record
-async function create(language: string, uuid?: string, name?: string) {
+async function create(
+    language?: string,
+    uuid?: string,
+    name?: string
+): Promise<{ id: Types.ObjectId; session_id: string; uuid: string }> {
     const data: Record = {
         UUID: uuid ? uuid : await generateUUID(),
         chat: {
-            language: language,
+            language: language ? language : "en_gb",
             conversation: [],
         },
-        name: name ?? "",
+        name: name ? name : "",
         session_id: await generateSessionId(),
         is_active: true,
     };
@@ -42,11 +47,11 @@ async function find_byId_record(uuid: String) {
 
 //Used when it is unknown if we have or have not got a current record
 async function find_or_create(
-    language: string,
+    language?: string,
     name?: string,
     uuid?: string,
     session_id?: string
-) {
+): Promise<{ id: Types.ObjectId; session_id: string; uuid: string }> {
     //Check if we have a uuid
     if (uuid) {
         //Check if we gave a session id
@@ -58,7 +63,7 @@ async function find_or_create(
 
             //If we can't find the record or it is now currently inactive then return a new record.
             if (!lookup_record || !lookup_record.is_active)
-                return create(language, name ?? "", uuid);
+                return create(language, name, uuid);
             else
                 return {
                     id: lookup_record._id,
@@ -73,7 +78,7 @@ async function find_or_create(
             });
 
             //If we can't find any active record then create a new active record.
-            if (!lookup_record) return create(language, name ?? "", uuid);
+            if (!lookup_record) return create(language, name, uuid);
             else
                 return {
                     id: lookup_record._id,
@@ -83,7 +88,7 @@ async function find_or_create(
         }
     } else {
         //If not create and return a new record
-        return create(language, name ?? "");
+        return create(language, name);
     }
 }
 
