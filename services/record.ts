@@ -8,6 +8,7 @@ async function create(
     uuid?: string,
     name?: string
 ): Promise<{ id: Types.ObjectId; session_id: string; uuid: string }> {
+    //Create a new record object
     const data: Record = {
         UUID: uuid ? uuid : await generateUUID(),
         chat: {
@@ -18,8 +19,11 @@ async function create(
         session_id: await generateSessionId(),
         is_active: true,
     };
+
+    //Make the record a schema and save it too our database
     const record = await new RecordModel(data).save();
 
+    //Return the id, session id and uuid of the user
     return { id: record._id, session_id: record.session_id, uuid: record.UUID };
 }
 
