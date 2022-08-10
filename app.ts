@@ -1,6 +1,7 @@
 import express from "express";
 import { connection } from "mongoose";
 import connect from "./config/mongoConfig";
+import actions from "./routes/actions";
 import lex_routes from "./routes/lex";
 import router from "./routes/routes";
 
@@ -16,6 +17,8 @@ function start_server() {
     app.use(express.json());
 
     app.use("/api", router);
+
+    app.use("/action", actions)
 
     //Add lex too the routes
     app.use("/lex", lex_routes);
