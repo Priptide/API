@@ -39,6 +39,8 @@ function start_server() {
     app.listen(port, () => {
         console.log(`server started at http://localhost:${port}`);
     });
+
+    
 }
 
 //Connect to mongodb
@@ -49,3 +51,5 @@ connection.once("open", async () => {
     console.log("Connected to database");
     start_server();
 });
+
+
