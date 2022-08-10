@@ -3,6 +3,7 @@ import { connection } from "mongoose";
 import connect from "./config/mongoConfig";
 import lex_routes from "./routes/lex";
 import router from "./routes/routes";
+import cors from "cors";
 
 function start_server() {
     //server setup
@@ -12,6 +13,7 @@ function start_server() {
     //port set-up
     const port = process.env.SERVER_PORT ?? 3000;
 
+    app.use(cors());
     //Add express json to allow loading of body data
     app.use(express.json());
 
