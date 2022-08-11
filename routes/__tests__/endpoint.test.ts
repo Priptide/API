@@ -32,4 +32,16 @@ describe("endpoint testing", () => {
                 );
             });
     });
+
+    test("GET /price compare", async () => {
+        //start_server();
+        await supertest(baseURL)
+            .get("/price-comp-click")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.message).toEqual(
+                    "http://www.compare.ford.co.uk/home?kee=380519"
+                );
+            });
+    });
 });
