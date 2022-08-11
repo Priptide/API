@@ -34,6 +34,7 @@ async function send_message(message: string, sessionId: string) {
     //Set the local variables from the data
     const interpretations = data["interpretations"];
     var local_message;
+    var timestamp;
 
     //Add user message to our record.
     record.add_message(false, message);
@@ -42,7 +43,7 @@ async function send_message(message: string, sessionId: string) {
         local_message = data["messages"][0]["content"] ?? "";
 
         //Add lex message too our record.
-        record.add_message(true, local_message);
+        timestamp = record.add_message(true, local_message);
     }
 
     //Save the record model.
@@ -50,7 +51,7 @@ async function send_message(message: string, sessionId: string) {
 
     //Return the messages and list of possible interpretations
     return {
-        message: local_message,
+        message: { text: local_message, time: timestamp },
         interpretations: interpretations,
     };
 }

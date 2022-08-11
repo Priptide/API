@@ -67,6 +67,8 @@ recordSchema.method("add_message", function (is_bot: boolean, message: string) {
 
     //Add this message element too the record schema.
     this.chat.conversation.push(local_message);
+
+    return local_message.time;
 });
 
 export default model<Record, RecordModel>("Record", recordSchema);
