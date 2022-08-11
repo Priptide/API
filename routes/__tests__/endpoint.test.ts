@@ -7,6 +7,8 @@ const baseURL = "http://localhost:3000/action";
 
 describe("endpoint testing", () => {
     start_server();
+
+    //Testdrive endpoint testing
     test("GET /testdrive-click", async () => {
         await supertest(baseURL)
             .get("/testdrive-click")
@@ -18,6 +20,7 @@ describe("endpoint testing", () => {
             });
     });
 
+    //Booking a service endpoint test
     test("GET /book-service-click", async () => {
         //start_server();
         await supertest(baseURL)
