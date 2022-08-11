@@ -1,12 +1,20 @@
 import request from "supertest";
 import express from "express";
 import supertest from "supertest";
-import { start_server } from "../../server/server";
+import { start_server } from "../../server";
 
 const baseURL = "http://localhost:3000/action";
-
+var server: any;
 describe("endpoint testing", () => {
-    start_server();
+    //Start the express server locally
+    beforeAll(() => {
+        server = start_server();
+    });
+
+    //Stop the express server.
+    afterAll(() => {
+        server.close();
+    });
 
     //Testdrive endpoint testing
     test("GET /testdrive-click", async () => {

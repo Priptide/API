@@ -1,16 +1,13 @@
 import express from "express";
 import { connection } from "mongoose";
-import actions from "../routes/actions";
-import lex_routes from "../routes/lex";
-import router from "../routes/routes";
+import actions from "./routes/actions";
+import lex_routes from "./routes/lex";
+import router from "./routes/routes";
 
 //server setup
 export function start_server() {
     //server setup
-
     const app = express();
-
-    //port set-up
 
     //Add express json to allow loading of body data
     app.use(express.json());
@@ -33,11 +30,16 @@ export function start_server() {
             message: error.message,
         });
     });
+
+    //Set the port from an environment variable or default to 3000.
     const port = process.env.SERVER_PORT ?? 3000;
-    app.listen(port, () => {
-        console.log(`server started at http://localhost:${port}`);
+
+    //Listen on the current port
+    const server = app.listen(port, () => {
+        console.log(`Server started at http://localhost:${port}`);
     });
-    // start the express server
+
+    return server;
 }
 
 // start the express server
