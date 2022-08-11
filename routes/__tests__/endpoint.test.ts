@@ -1,15 +1,29 @@
 import request from "supertest";
 import express from "express";
+import supertest from "supertest";
+import start_server from "../../app";
 
 const app = express();
-const baseURL = "http://127.0.0.1:3000/action"
+const baseURL = "http://localhost:3000/action"
 
-describe("GET /testdrive-click", () => {
-  it("clicks testdrive", async () => {
-    const result = await request(app).get("/action/testdrive-click");
-    expect(result.body.message).toContain("https://www.ford.co.uk/shop/test-drive");
-    
-    expect(result.statusCode).toEqual(200);
-  });
+
+test("GET /testdrive-click", async () => {
+    start_server()
+    await supertest(baseURL)
+    .get("/testdrive-click")
+    .expect(200)
+    .then((response) => {   
+        expect(response.body.message).toEqual('https://www.ford.co.uk/shop/test-drive');
+    })
+});
+
+test("GET /", async () => {
+    start_server()
+    await supertest(baseURL)
+    .get("/testdrive-click")
+    .expect(200)
+    .then((response) => {   
+        expect(response.body.message).toEqual('https://www.ford.co.uk/shop/test-drive');
+    })
 });
 

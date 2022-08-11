@@ -52,4 +52,4 @@ connection.once("open", async () => {
     start_server();
 });
 
-
+export default start_server
