@@ -1,0 +1,1 @@
+{"version":"1.0.0","name":"api","dependencies":{"@aws-sdk/client-lex-runtime-v2":{"version":"3.142.0"},"body-parser":{"version":"1.20.0"},"cors":{"version":"2.8.5"},"dotenv":{"version":"16.0.1"},"express":{"version":"4.18.1"},"mongodb":{"version":"4.8.1"},"mongoose":{"version":"6.5.0"},"nodemon":{"version":"2.0.19"}}}
