@@ -57,18 +57,21 @@ const recordSchema = new Schema<Record, RecordModel, RecordMethods>({
     },
 });
 
-recordSchema.method("add_message", function (is_bot: boolean, message: string) {
-    //Create a new message element.
-    const local_message: Message = {
-        text: message,
-        time: new Date(Date.now()),
-        is_bot: is_bot,
-    };
+recordSchema.method(
+    "add_message",
+    function (is_bot: boolean, message: string): Date {
+        //Create a new message element.
+        const local_message: Message = {
+            text: message,
+            time: new Date(Date.now()),
+            is_bot: is_bot,
+        };
 
-    //Add this message element too the record schema.
-    this.chat.conversation.push(local_message);
+        //Add this message element too the record schema.
+        this.chat.conversation.push(local_message);
 
-    return local_message.time;
-});
+        return local_message.time;
+    }
+);
 
 export default model<Record, RecordModel>("Record", recordSchema);
