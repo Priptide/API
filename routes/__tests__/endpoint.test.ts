@@ -12,10 +12,10 @@ describe("endpoint testing", () => {
     test("GET /testdrive-click", async () => {
         await supertest(baseURL)
             .get("/testdrive-click")
-            .expect(200)
+            .expect(200) //the right status code
             .then((response) => {
                 expect(response.body.message).toEqual(
-                    "https://www.ford.co.uk/shop/test-drive"
+                    "https://www.ford.co.uk/shop/test-drive" // the right link
                 );
             });
     });
@@ -25,22 +25,23 @@ describe("endpoint testing", () => {
         //start_server();
         await supertest(baseURL)
             .get("/book-service-click")
-            .expect(200)
+            .expect(200) //the right status code
             .then((response) => {
                 expect(response.body.message).toEqual(
-                    "https://www.ford.co.uk/support/book-a-service/dealer-step"
+                    "https://www.ford.co.uk/support/book-a-service/dealer-step" // the right link
                 );
             });
     });
 
+    //test the price comparing endpoint
     test("GET /price compare", async () => {
         //start_server();
         await supertest(baseURL)
             .get("/price-comp-click")
-            .expect(200)
+            .expect(200) //the right status code
             .then((response) => {
                 expect(response.body.message).toEqual(
-                    "http://www.compare.ford.co.uk/home?kee=380519"
+                    "http://www.compare.ford.co.uk/home?kee=380519" // the right link
                 );
             });
     });
