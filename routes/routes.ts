@@ -1,8 +1,8 @@
 import express from "express";
 const router = express.Router();
 
-router.get("/post", (req, res) => {
-    res.send("GET API");
+router.get("/", (req, res) => {
+    res.send("CHATBOT API");
 });
 router.post("/post", (req, res) => {
     res.send("Post API");
