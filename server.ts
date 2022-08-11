@@ -1,13 +1,18 @@
+import cors from "cors";
 import express from "express";
+import { Server } from "http";
 import { connection } from "mongoose";
 import actions from "./routes/actions";
 import lex_routes from "./routes/lex";
 import router from "./routes/routes";
 
 //server setup
-export function start_server() {
+export function start_server(): Server {
     //server setup
     const app = express();
+
+    //Import cords
+    app.use(cors());
 
     //Add express json to allow loading of body data
     app.use(express.json());
@@ -39,7 +44,6 @@ export function start_server() {
         console.log(`Server started at http://localhost:${port}`);
     });
 
+    //Return server
     return server;
 }
-
-// start the express server
