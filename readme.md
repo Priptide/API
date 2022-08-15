@@ -4,7 +4,7 @@
 
 `(sudo) npm install -g yarn`
 
-`(sudo) npm install -g Typescript`
+`(sudo) npm install -g typescript`
 
 ----
 
