@@ -2,7 +2,7 @@ version: "3.8"
 
 api:
     env_file: "./API/.env"
-    container_name: api
+    container_name: practical_brattain
     restart: always
     build:
       context: ./API
