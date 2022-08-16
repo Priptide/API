@@ -10,7 +10,7 @@ lex_routes.post("/send", async (req, res, next) => {
     try {
         //Create a new record for this chat or find the current one.
         const { id, session_id, uuid } = await RecordService.find_or_create(
-            req.body.language ?? "en_gb",
+            req.body.language ?? "en_GB",
             req.body.name,
             req.body.uuid,
             req.body.session_id
@@ -19,7 +19,8 @@ lex_routes.post("/send", async (req, res, next) => {
         //Get all possible intentions.
         const { message, interpretations } = await LexService.send_message(
             req.body.message ?? "",
-            session_id
+            session_id,
+            req.body.language ?? "en_GB"
         );
 
         //If there is a message send it back or return an error otherwise.
