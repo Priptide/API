@@ -1,13 +1,14 @@
 version: "3"
 
-api:
-    env_file: "./.env"
-    container_name: practical_brattain
-    restart: always
-    build:
-      dockerfile: ./Dockerfile
-    image: "sianadd/chatbot:firsttry"
-    
+services:
+  api:
+      env_file: "./.env"
+      container_name: practical_brattain
+      restart: always
+      build:
+        dockerfile: ./Dockerfile
+      image: "sianadd/chatbot:firsttry"
+      
 
-    ports:
-      - "3000:3000"
+      ports:
+        - "3000:3000"
