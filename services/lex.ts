@@ -3,7 +3,11 @@ import lexClient from "../config/awsConfig";
 import RecordModel from "../models/record";
 
 //Return the full list of possible intents
-async function send_message(message: string, sessionId: string) {
+async function send_message(
+    message: string,
+    sessionId: string,
+    language?: string
+) {
     //Check we have a valid message
     if (!message) throw new Error("No valid message");
 
@@ -24,7 +28,7 @@ async function send_message(message: string, sessionId: string) {
         text: message,
         botId: process.env.BOT_ID ?? "",
         botAliasId: process.env.BOT_ALIAS_ID ?? "",
-        localeId: process.env.LOCALE_ID ?? "",
+        localeId: language ?? "en_GB",
         sessionId: sessionId,
     });
 
