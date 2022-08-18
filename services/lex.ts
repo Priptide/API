@@ -8,6 +8,7 @@ import {
     SampleUtterance,
     IntentFilterName,
     IntentFilter,
+    IntentFilterOperator,
 } from "@aws-sdk/client-lex-models-v2";
 import { lexClient, modelLexClient } from "../config/awsConfig";
 import RecordModel from "../models/record";
@@ -47,7 +48,7 @@ async function send_message(
         text: message,
         botId: process.env.BOT_ID ?? "",
         botAliasId: process.env.BOT_ALIAS_ID ?? "",
-        localeId: language ?? "en_GB",
+        localeId: language ? language : "en_GB",
         sessionId: sessionId,
     });
 
@@ -84,7 +85,8 @@ async function send_message(
         if (interpretations && interpretations[i]) {
             //Create a button from this interpretation
             const localButton = await get_intent_utterance(
-                interpretations[i].intent?.name ?? ""
+                interpretations[i].intent?.name ?? "",
+                language
             );
 
             //If we have a valid button, add this too the list
@@ -101,28 +103,31 @@ async function send_message(
 
 //Return the content of any given intent using the intentName
 async function get_intent_utterance(
-    name: string
+    name: string,
+    language?: string
 ): Promise<AlternateButton | undefined> {
     //Create a client for using the lex model API
     const client = modelLexClient();
 
     //Create a filter for our list command
     const filter: IntentFilter = {
-        name: "IntentName",
+        name: IntentFilterName.IntentName,
         values: [name],
-        operator: "EQ",
+        operator: IntentFilterOperator.Equals,
     };
 
     //Create a command to find the intent id using the intent name
     const searchCommand = new ListIntentsCommand({
         botId: process.env.BOT_ID ?? "",
-        localeId: process.env.LOCALE_ID ?? "",
+        localeId: language ? language : "en_GB",
         botVersion: process.env.BOT_VERSION ?? "",
         filters: [filter],
     });
 
     //Send the search command too the server
     const searchResults = await client.send(searchCommand);
+
+    console.log(searchResults);
 
     //Check that we have a single unique result return empty if not
     if (searchResults.intentSummaries?.length != 1) return;
