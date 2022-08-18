@@ -12,7 +12,7 @@ import RecordModel from "../models/record";
 //Create an interface for buttons
 export interface AlternateButton {
     text: string;
-    id: string;
+    url?: string;
 }
 
 //Return the full list of possible intents
@@ -109,7 +109,7 @@ async function get_intent_utterance(
     const filter: IntentFilter = {
         name: IntentFilterName.IntentName,
         values: [name],
-        operator: IntentFilterOperator.Contains,
+        operator: IntentFilterOperator.Equals,
     };
 
     //Create a command to find the intent id using the intent name
@@ -153,14 +153,32 @@ async function get_intent_utterance(
     //Send command to get information of the given intent
     const response = await client.send(descriptionCommand);
 
+    console.log(response);
+
     //If there is no utterances or it's empty return an empty string
     if (!response.sampleUtterances || !response.sampleUtterances[0].utterance)
+        return;
+
+    //Check that a url is attached too the response object
+    if (
+        !response.fulfillmentCodeHook ||
+        !response.fulfillmentCodeHook.postFulfillmentStatusSpecification ||
+        !response.fulfillmentCodeHook.postFulfillmentStatusSpecification
+            .successResponse ||
+        !response.fulfillmentCodeHook.postFulfillmentStatusSpecification
+            .successResponse.messageGroups ||
+        response.fulfillmentCodeHook.postFulfillmentStatusSpecification
+            .successResponse.messageGroups.length == 0 ||
+        !response.fulfillmentCodeHook?.postFulfillmentStatusSpecification
+            ?.successResponse?.messageGroups[0].message
+    )
         return;
 
     //Create an object for the first utterance (actual of the intent) and the intent id
     const output: AlternateButton = {
         text: response.sampleUtterances[0].utterance,
-        id: id,
+        url: response.fulfillmentCodeHook?.postFulfillmentStatusSpecification
+            ?.successResponse?.messageGroups[0].message.plainTextMessage?.value,
     };
 
     //Return this object
