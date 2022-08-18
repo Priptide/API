@@ -153,8 +153,6 @@ async function get_intent_utterance(
     //Send command to get information of the given intent
     const response = await client.send(descriptionCommand);
 
-    console.log(response);
-
     //If there is no utterances or it's empty return an empty string
     if (!response.sampleUtterances || !response.sampleUtterances[0].utterance)
         return;
