@@ -1,11 +1,7 @@
-import {
-    Interpretation,
-    RecognizeTextCommand,
-} from "@aws-sdk/client-lex-runtime-v2";
+import { RecognizeTextCommand } from "@aws-sdk/client-lex-runtime-v2";
 import {
     ListIntentsCommand,
     DescribeIntentCommand,
-    SampleUtterance,
     IntentFilterName,
     IntentFilter,
     IntentFilterOperator,
@@ -113,21 +109,29 @@ async function get_intent_utterance(
     const filter: IntentFilter = {
         name: IntentFilterName.IntentName,
         values: [name],
-        operator: IntentFilterOperator.Equals,
+        operator: IntentFilterOperator.Contains,
     };
 
     //Create a command to find the intent id using the intent name
-    const searchCommand = new ListIntentsCommand({
+    var searchCommand = new ListIntentsCommand({
         botId: process.env.BOT_ID ?? "",
         localeId: language ? language : "en_GB",
         botVersion: process.env.BOT_VERSION ?? "",
         filters: [filter],
+        maxResults: 600,
     });
 
     //Send the search command too the server
-    const searchResults = await client.send(searchCommand);
+    var searchResults = await client.send(searchCommand);
 
-    console.log(searchResults);
+    //Keep looping until there are no more results or we find a result
+    while (
+        searchResults.nextToken &&
+        (searchResults.intentSummaries?.length ?? 0) <= 0
+    ) {
+        searchCommand.input.nextToken = searchResults.nextToken;
+        searchResults = await client.send(searchCommand);
+    }
 
     //Check that we have a single unique result return empty if not
     if (searchResults.intentSummaries?.length != 1) return;
@@ -142,7 +146,7 @@ async function get_intent_utterance(
     const descriptionCommand = new DescribeIntentCommand({
         botId: process.env.BOT_ID ?? "",
         localeId: process.env.LOCALE_ID ?? "",
-        botVersion: "2",
+        botVersion: process.env.BOT_VERSION ?? "",
         intentId: id,
     });
 
@@ -150,12 +154,12 @@ async function get_intent_utterance(
     const response = await client.send(descriptionCommand);
 
     //If there is no utterances or it's empty return an empty string
-    if (!response.sampleUtterances || response.sampleUtterances[0].utterance)
+    if (!response.sampleUtterances || !response.sampleUtterances[0].utterance)
         return;
 
     //Create an object for the first utterance (actual of the intent) and the intent id
     const output: AlternateButton = {
-        text: response.sampleUtterances[0].utterance ?? "",
+        text: response.sampleUtterances[0].utterance,
         id: id,
     };
 
