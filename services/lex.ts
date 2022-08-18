@@ -5,7 +5,7 @@ import RecordModel from "../models/record";
 
 
 //Return the full list of possible intents
-async function send_message(message: string, sessionId: string): Promise<{ message: { text: string, time: Date }, interpretations: Interpretation[] }> {
+async function send_message(message: string, sessionId: string, language?:string): Promise<{ message: { text: string, time: Date }, interpretations: Interpretation[] }> {
     //Check we have a valid message
     if (!message) throw new Error("No valid message");
 
