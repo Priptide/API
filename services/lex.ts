@@ -27,7 +27,7 @@ async function send_message(message: string, sessionId: string): Promise<{ messa
         text: message,
         botId: process.env.BOT_ID ?? "",
         botAliasId: process.env.BOT_ALIAS_ID ?? "",
-        localeId: process.env.LOCALE_ID ?? "",
+        localeId: language ?? "en_GB",
         sessionId: sessionId,
     });
 
