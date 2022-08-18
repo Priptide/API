@@ -26,8 +26,6 @@ export function start_server(): Server {
 
     //Setup routing for errors
     app.use((error: any, req: any, res: any, next: any) => {
-        console.log(error.stack);
-
         res.status(error.status || 500);
 
         res.json({
