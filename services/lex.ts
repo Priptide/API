@@ -1,8 +1,7 @@
 import { Interpretation, RecognizeTextCommand } from "@aws-sdk/client-lex-runtime-v2";
-import { LexModelsV2Client, ListIntentsCommand, DescribeIntentCommand, SampleUtterance } from "@aws-sdk/client-lex-models-v2";
-import lexClient from "../config/awsConfig";
+import { ListIntentsCommand, DescribeIntentCommand, SampleUtterance } from "@aws-sdk/client-lex-models-v2";
+import { lexClient, modelLexClient } from "../config/awsConfig";
 import RecordModel from "../models/record";
-import { isNamedExports } from "typescript";
 
 
 //Return the full list of possible intents
@@ -60,7 +59,7 @@ async function send_message(message: string, sessionId: string): Promise<{ messa
 }
 
 async function get_intent_utterance(name: string): Promise<string | undefined> {
-    const client = new LexModelsV2Client({ credentials: { accessKeyId: process.env.AWS_ACCESS_KEY ?? "", secretAccessKey: process.env.AWS_SECRET_KEY ?? "" } });
+    const client = modelLexClient();
     const listIdsCommand = new ListIntentsCommand({ botId: process.env.BOT_ID ?? "", localeId: process.env.LOCALE_ID ?? "", botVersion: "2" });
     const listIds = await client.send(listIdsCommand);
     const id = listIds.intentSummaries?.find(summary => summary.intentName === name)?.intentId;
