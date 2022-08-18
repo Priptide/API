@@ -88,8 +88,6 @@ describe("Lex_Send_Message", () => {
         //Expect data to be provided
         expect(data).toBeDefined();
 
-        console.log(data.interpretations);
-
         //Get our updated record
         const updatedRecord = await RecordModel.findOne({
             _id: recordModel._id,

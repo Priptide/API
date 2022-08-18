@@ -17,7 +17,7 @@ lex_routes.post("/send", async (req, res, next) => {
         );
 
         //Get all possible intentions.
-        const { message, interpretations } = await LexService.send_message(
+        const { message, alternateButtons } = await LexService.send_message(
             req.body.message ?? "",
             session_id,
             req.body.language ?? "en_GB"
@@ -29,7 +29,7 @@ lex_routes.post("/send", async (req, res, next) => {
                 uuid: uuid,
                 session_id: session_id,
                 message: message,
-                intentions: interpretations,
+                alternateButtons: alternateButtons,
             });
         } else {
             res.status(500).json({

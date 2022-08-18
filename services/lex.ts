@@ -1,11 +1,32 @@
-import { Interpretation, RecognizeTextCommand } from "@aws-sdk/client-lex-runtime-v2";
-import { ListIntentsCommand, DescribeIntentCommand, SampleUtterance } from "@aws-sdk/client-lex-models-v2";
+import {
+    Interpretation,
+    RecognizeTextCommand,
+} from "@aws-sdk/client-lex-runtime-v2";
+import {
+    ListIntentsCommand,
+    DescribeIntentCommand,
+    SampleUtterance,
+    IntentFilterName,
+    IntentFilter,
+} from "@aws-sdk/client-lex-models-v2";
 import { lexClient, modelLexClient } from "../config/awsConfig";
 import RecordModel from "../models/record";
 
+//Create an interface for buttons
+export interface AlternateButton {
+    text: string;
+    id: string;
+}
 
 //Return the full list of possible intents
-async function send_message(message: string, sessionId: string, language?:string): Promise<{ message: { text: string, time: Date }, interpretations: Interpretation[] }> {
+async function send_message(
+    message: string,
+    sessionId: string,
+    language?: string
+): Promise<{
+    message: { text: string; time: Date };
+    alternateButtons: AlternateButton[];
+}> {
     //Check we have a valid message
     if (!message) throw new Error("No valid message");
 
@@ -51,21 +72,90 @@ async function send_message(message: string, sessionId: string, language?:string
     //Save the record model.
     await record.save();
 
-    //Return the messages and list of possible interpretations
+    //Create a list for alternative buttons
+    const alternateButtons: AlternateButton[] = [];
+
+    //Get the length of the interpretations
+    const length = interpretations?.length ?? 0;
+
+    //Iterate through the interpretations and turn them into buttons
+    for (let i = 0; i < length; i++) {
+        //Check we have a list and element at our pointer
+        if (interpretations && interpretations[i]) {
+            //Create a button from this interpretation
+            const localButton = await get_intent_utterance(
+                interpretations[i].intent?.name ?? ""
+            );
+
+            //If we have a valid button, add this too the list
+            if (localButton) alternateButtons.push(localButton);
+        }
+    }
+
+    //Return the messages and list of alternative options
     return {
         message: { text: local_message ?? "", time: timestamp },
-        interpretations: interpretations ?? [],
+        alternateButtons: alternateButtons ?? [],
     };
 }
 
-async function get_intent_utterance(name: string): Promise<string | undefined> {
+//Return the content of any given intent using the intentName
+async function get_intent_utterance(
+    name: string
+): Promise<AlternateButton | undefined> {
+    //Create a client for using the lex model API
     const client = modelLexClient();
-    const listIdsCommand = new ListIntentsCommand({ botId: process.env.BOT_ID ?? "", localeId: process.env.LOCALE_ID ?? "", botVersion: "2" });
-    const listIds = await client.send(listIdsCommand);
-    const id = listIds.intentSummaries?.find(summary => summary.intentName === name)?.intentId;
-    const descriptionCommand = new DescribeIntentCommand({ botId: process.env.BOT_ID ?? "", localeId: process.env.LOCALE_ID ?? "", botVersion: "2", intentId: id });
+
+    //Create a filter for our list command
+    const filter: IntentFilter = {
+        name: "IntentName",
+        values: [name],
+        operator: "EQ",
+    };
+
+    //Create a command to find the intent id using the intent name
+    const searchCommand = new ListIntentsCommand({
+        botId: process.env.BOT_ID ?? "",
+        localeId: process.env.LOCALE_ID ?? "",
+        botVersion: process.env.BOT_VERSION ?? "",
+        filters: [filter],
+    });
+
+    //Send the search command too the server
+    const searchResults = await client.send(searchCommand);
+
+    //Check that we have a single unique result return empty if not
+    if (searchResults.intentSummaries?.length != 1) return;
+
+    //Get our current id
+    const id = searchResults.intentSummaries[0].intentId;
+
+    //Check we have an id, return null if not
+    if (!id) return;
+
+    //Create a command for get the description of the given intent using the found id
+    const descriptionCommand = new DescribeIntentCommand({
+        botId: process.env.BOT_ID ?? "",
+        localeId: process.env.LOCALE_ID ?? "",
+        botVersion: "2",
+        intentId: id,
+    });
+
+    //Send command to get information of the given intent
     const response = await client.send(descriptionCommand);
-    return response.sampleUtterances ? response.sampleUtterances[0].utterance : "";
+
+    //If there is no utterances or it's empty return an empty string
+    if (!response.sampleUtterances || response.sampleUtterances[0].utterance)
+        return;
+
+    //Create an object for the first utterance (actual of the intent) and the intent id
+    const output: AlternateButton = {
+        text: response.sampleUtterances[0].utterance ?? "",
+        id: id,
+    };
+
+    //Return this object
+    return output;
 }
 
 export default { send_message, get_intent_utterance };
