@@ -60,7 +60,7 @@ async function send_message(message: string, sessionId: string): Promise<{ messa
 }
 
 async function get_intent_utterance(name: string): Promise<string | undefined> {
-    const client = new LexModelsV2Client({ credentials: { accessKeyId: "AKIAURQ5IQMSZG677GEA", secretAccessKey: "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" } });
+    const client = new LexModelsV2Client({ credentials: { accessKeyId: process.env.AWS_ACCESS_KEY ?? "", secretAccessKey: process.env.AWS_SECRET_KEY ?? "" } });
     const listIdsCommand = new ListIntentsCommand({ botId: process.env.BOT_ID ?? "", localeId: process.env.LOCALE_ID ?? "", botVersion: "2" });
     const listIds = await client.send(listIdsCommand);
     const id = listIds.intentSummaries?.find(summary => summary.intentName === name)?.intentId;
