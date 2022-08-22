@@ -40,10 +40,9 @@ async function find_record() {
 
 // Getting a record by UUID
 async function find_byId_record(uuid: string) {
+    if (!uuid) throw new Error("Missing uuid");
 
-    if (!uuid)  throw new Error("Missing uuid")
-
-    await RecordModel.findOne({UUID: uuid})
+    await RecordModel.findOne({ UUID: uuid })
         .then((res) => {
             //console.log({ res });
             return res;
@@ -99,5 +98,7 @@ async function find_or_create(
         return create(language, undefined, name);
     }
 }
+
+//Deleting records
 
 export default { create, find_record, find_byId_record, find_or_create };

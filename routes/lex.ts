@@ -51,5 +51,9 @@ lex_routes.post("/send", async (req, res, next) => {
     }
 });
 
+lex_routes.delete("/delete/1234", (req, res) => {
+    console.log("Method called is -- ", req.method);
+});
+
 //Export routes for lex
 export default lex_routes;
