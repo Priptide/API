@@ -205,4 +205,4 @@ async function end_session(session_id: string, uuid: string) {
     record.save();
 }
 
-export default { send_message, get_intent_utterance };
+export default { send_message, get_intent_utterance, end_session };
