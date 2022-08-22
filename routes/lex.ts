@@ -51,8 +51,13 @@ lex_routes.post("/send", async (req, res, next) => {
     }
 });
 
+lex_routes.delete("/deleteall", async (req, res) => {
+    await RecordService.delete_allrecords();
+    res.send({ message: "Unactive records removed." });
+});
+
 lex_routes.delete("/delete", async (req, res) => {
-    await RecordService.delete_record(req.body.is_active);
+    await RecordService.delete_record();
     res.send({ message: "Record removed." });
 });
 

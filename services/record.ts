@@ -100,8 +100,16 @@ async function find_or_create(
 }
 
 //Deleting records
-async function delete_record(is_active?: boolean) {
-    await RecordModel.deleteOne({ is_active });
+async function delete_allrecords() {
+    await RecordModel.deleteMany({ is_active: false });
+}
+//allows us to delete by userid
+async function delete_record(uuid?: string) {
+    if (uuid) {
+        await RecordModel.deleteOne({ UUID: uuid });
+    } else {
+        console.log("record missing");
+    }
 }
 
 export default {
@@ -109,5 +117,6 @@ export default {
     find_record,
     find_byId_record,
     find_or_create,
+    delete_allrecords,
     delete_record,
 };
