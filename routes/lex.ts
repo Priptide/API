@@ -51,8 +51,9 @@ lex_routes.post("/send", async (req, res, next) => {
     }
 });
 
-lex_routes.delete("/delete/1234", (req, res) => {
-    console.log("Method called is -- ", req.method);
+lex_routes.delete("/delete", async (req, res) => {
+    await RecordService.delete_record(req.body.is_active);
+    res.send({ message: "Record removed." });
 });
 
 //Export routes for lex

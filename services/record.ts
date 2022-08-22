@@ -100,5 +100,14 @@ async function find_or_create(
 }
 
 //Deleting records
+async function delete_record(is_active?: boolean) {
+    await RecordModel.deleteOne({ is_active });
+}
 
-export default { create, find_record, find_byId_record, find_or_create };
+export default {
+    create,
+    find_record,
+    find_byId_record,
+    find_or_create,
+    delete_record,
+};
