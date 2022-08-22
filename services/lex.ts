@@ -202,7 +202,7 @@ async function end_session(session_id: string, uuid: string) {
     record.is_active = false;
 
     //Update the record
-    record.save();
+    await record.save();
 }
 
 export default { send_message, get_intent_utterance, end_session };
