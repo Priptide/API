@@ -12,7 +12,7 @@ async function create(
     const data: Record = {
         UUID: uuid ? uuid : await generateUUID(),
         chat: {
-            language: language ? language : "en_gb",
+            language: language ? language : "en_GB",
             conversation: [],
         },
         name: name ? name : "",
@@ -71,12 +71,27 @@ async function find_or_create(
             //If we can't find the record or it is now currently inactive then return a new record.
             if (!lookup_record || !lookup_record.is_active)
                 return create(language, uuid, name);
-            else
+            else {
+                //Check if the language changed
+                if (language && language != lookup_record.chat.language) {
+                    lookup_record.chat.language = language;
+                }
+
+                //Check if the name has changed
+                if (name && name != lookup_record.name) {
+                    lookup_record.name = name;
+                }
+
+                //Update record in case of change
+                await lookup_record.save();
+
+                //Return information on record
                 return {
                     id: lookup_record._id,
                     session_id: session_id,
                     uuid: uuid,
                 };
+            }
         } else {
             //Try and find an active record by the user
             const lookup_record = await RecordModel.findOne({
@@ -86,12 +101,26 @@ async function find_or_create(
 
             //If we can't find any active record then create a new active record.
             if (!lookup_record) return create(language, uuid, name);
-            else
+            else {
+                //Check if the language changed
+                if (language && language != lookup_record.chat.language) {
+                    lookup_record.chat.language = language;
+                }
+
+                //Check if the name has changed
+                if (name && name != lookup_record.name) {
+                    lookup_record.name = name;
+                }
+
+                //Update record in case of change
+                await lookup_record.save();
+
                 return {
                     id: lookup_record._id,
                     session_id: lookup_record.session_id,
                     uuid: uuid,
                 };
+            }
         }
     } else {
         //If not create and return a new record
