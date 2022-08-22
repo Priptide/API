@@ -51,5 +51,8 @@ lex_routes.post("/send", async (req, res, next) => {
     }
 });
 
+//This route is used to end an active lex session
+lex_routes.post("/end", async (req, res, next) => {});
+
 //Export routes for lex
 export default lex_routes;
