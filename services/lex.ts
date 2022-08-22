@@ -183,4 +183,26 @@ async function get_intent_utterance(
     return output;
 }
 
-export default { send_message, get_intent_utterance };
+//Used to mark a session as complete
+async function end_session(session_id: string, uuid: string) {
+    //First we want to check session and uuids are valid
+    if (!session_id) throw new Error("Missing session id");
+    if (!uuid) throw new Error("No valid UUID");
+
+    //Now we want to find the record for these users
+    const record = await RecordModel.findOne({
+        UUID: uuid,
+        session_id: session_id,
+    });
+
+    //If we can't find a record throw an error
+    if (!record) throw new Error("Record not found");
+
+    //Otherwise we want to mark this record as no longer active
+    record.is_active = false;
+
+    //Update the record
+    await record.save();
+}
+
+export default { send_message, get_intent_utterance, end_session };
