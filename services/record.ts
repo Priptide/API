@@ -40,10 +40,9 @@ async function find_record() {
 
 // Getting a record by UUID
 async function find_byId_record(uuid: string) {
+    if (!uuid) throw new Error("Missing uuid");
 
-    if (!uuid)  throw new Error("Missing uuid")
-
-    await RecordModel.findOne({UUID: uuid})
+    await RecordModel.findOne({ UUID: uuid })
         .then((res) => {
             //console.log({ res });
             return res;
@@ -100,4 +99,49 @@ async function find_or_create(
     }
 }
 
-export default { create, find_record, find_byId_record, find_or_create };
+//Used to update or create and update a record for non lex related usage
+async function update_record(
+    message: string,
+    is_bot: boolean,
+    init_uuid?: string,
+    init_session_id?: string,
+    language?: string,
+    name?: string
+): Promise<{ uuid: string; session_id: string }> {
+    //Check we have a valid message
+    if (!message) throw new Error("No valid message");
+
+    //Check if this record exists if not we can create a new one.
+    const { id, session_id, uuid } = await find_or_create(
+        language,
+        name,
+        init_uuid,
+        init_session_id
+    );
+
+    //Find this record we looked up
+    const record = await RecordModel.findById(id);
+
+    //If there is no record found return an error
+    if (!record) throw new Error("No valid record found");
+
+    //Update the record with the given message
+    record.add_message(is_bot, message);
+
+    //Save the record
+    await record.save();
+
+    //Return the session id and uuid
+    return {
+        uuid: uuid,
+        session_id: session_id,
+    };
+}
+
+export default {
+    create,
+    find_record,
+    find_byId_record,
+    find_or_create,
+    update_record,
+};
