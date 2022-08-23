@@ -1,6 +1,7 @@
 import RecordModel, { Record } from "../../../models/record";
-import mongoTesting from "../../../utils/mongoTesting";
+
 import LexService from "../../lex";
+import mongoTesting from "../../../utils/mongoTesting";
 
 describe("Lex_End_Session", () => {
     /**

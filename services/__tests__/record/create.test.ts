@@ -1,8 +1,7 @@
-import mongoTesting from "../../../utils/mongoTesting";
+import RecordModel, { Record } from "../../../models/record";
 
 import RecordService from "../../record";
-
-import RecordModel, { Record } from "../../../models/record";
+import mongoTesting from "../../../utils/mongoTesting";
 
 describe("Record_Create", () => {
     /**

@@ -1,12 +1,13 @@
-import { RecognizeTextCommand } from "@aws-sdk/client-lex-runtime-v2";
 import {
-    ListIntentsCommand,
     DescribeIntentCommand,
-    IntentFilterName,
     IntentFilter,
+    IntentFilterName,
     IntentFilterOperator,
+    ListIntentsCommand,
 } from "@aws-sdk/client-lex-models-v2";
 import { lexClient, modelLexClient } from "../config/awsConfig";
+
+import { RecognizeTextCommand } from "@aws-sdk/client-lex-runtime-v2";
 import RecordModel from "../models/record";
 
 //Create an interface for buttons

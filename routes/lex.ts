@@ -1,6 +1,6 @@
-import express from "express";
 import LexService from "../services/lex";
 import RecordService from "../services/record";
+import express from "express";
 
 //Setup a router
 const lex_routes = express.Router();
