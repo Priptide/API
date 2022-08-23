@@ -1,4 +1,4 @@
-import RecordModel, { Record } from "../models/record";
+import RecordModel, { Chat, Record } from "../models/record";
 import { generateSessionId, generateUUID } from "../utils/cryptoGeneration";
 import { Types } from "mongoose";
 
@@ -167,10 +167,69 @@ async function update_record(
     };
 }
 
+//Used to find the users most recent chat, it will also mark any old active chats as inactive
+async function get_by_uuid(uuid: string) {
+    //Check the uuid isn't an empty string
+    if (!uuid) throw new Error("Invalid uuid");
+
+    //Find an records that are still active
+    const records = await RecordModel.find({ UUID: uuid, is_active: true });
+
+    //If we can't find any records then throw an error
+    if (records.length == 0) throw new Error("No records found");
+
+    var session_id: string;
+
+    var chat: Chat;
+
+    //If the length is greater than 1 we need to work out which is most recent.
+    if (records.length > 1) {
+        //Set the first element last active as an initial state.
+        var last_active_max = records[0].last_active();
+        var last_active_record = records[0];
+
+        //Loop through each record.
+        for (let i = 1; i < records.length; i++) {
+            //Get the time they were last active.
+            const last_active = records[i].last_active();
+
+            //Check if this record is the first active or was active more recently.
+            if (!last_active_max || last_active > last_active_max) {
+                //Update as the new max.
+                last_active_max = last_active;
+
+                //If there was a previous record then set it too inactive and save.
+                if (last_active_record) {
+                    last_active_record.is_active = false;
+                    await last_active_record.save();
+                }
+
+                //Update the last active record too this record.
+                last_active_record = records[i];
+            } else {
+                //If not then we want to set this record to inactive and save it.
+                records[i].is_active = false;
+                await records[i].save();
+            }
+        }
+        //Get the session id and chat params from the newest record
+        session_id = last_active_record.session_id;
+        chat = last_active_record.chat;
+    } else {
+        //Set the session id and chat params
+        session_id = records[0].session_id;
+        chat = records[0].chat;
+    }
+
+    //Return the uuid, session id and chat (language and messages)
+    return { session_id: session_id, uuid: uuid, chat: chat };
+}
+
 export default {
     create,
     find_record,
     find_byId_record,
     find_or_create,
     update_record,
+    get_by_uuid,
 };
