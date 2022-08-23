@@ -178,9 +178,10 @@ async function get_by_uuid(uuid: string) {
     //If we can't find any records then throw an error
     if (records.length == 0) throw new Error("No records found");
 
+    //Setup empty variables for the chat and session id
     var session_id: string;
-
     var chat: Chat;
+    var name: string;
 
     //If the length is greater than 1 we need to work out which is most recent.
     if (records.length > 1) {
@@ -215,14 +216,16 @@ async function get_by_uuid(uuid: string) {
         //Get the session id and chat params from the newest record
         session_id = last_active_record.session_id;
         chat = last_active_record.chat;
+        name = last_active_record.name ?? "";
     } else {
         //Set the session id and chat params
         session_id = records[0].session_id;
         chat = records[0].chat;
+        name = records[0].name ?? "";
     }
 
     //Return the uuid, session id and chat (language and messages)
-    return { session_id: session_id, uuid: uuid, chat: chat };
+    return { session_id: session_id, uuid: uuid, chat: chat, name: name };
 }
 
 export default {
