@@ -101,24 +101,24 @@ async function find_or_create(
 }
 //Deleting records if message is empty || conversation is older than a day
 async function delete_allrecords() {
-    const records = await RecordModel.find({});
+    const records = await RecordModel.find();
 
     if (records.length == 0) throw new Error("No records found");
 
     //If the length is greater than 1 we need to work out which is most recent.
-    if (records.length > 1) {
+    if (records.length >= 1) {
         //Set date to yesterday
         var today = new Date();
 
         today.setDate(today.getDate() - 1);
         //Loop through each record.
-        for (let i = 1; i < records.length; i++) {
+        for (let i = 0; i < records.length; i++) {
             if (records[i].last_active() > today || !records[0].is_active) {
                 await RecordModel.deleteMany({});
             }
         }
     } else {
-        throw new Error("No records found");
+        throw new Error("No records found 1 ");
     }
 }
 //allows us to delete by userid
