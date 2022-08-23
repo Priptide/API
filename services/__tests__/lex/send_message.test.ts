@@ -68,7 +68,7 @@ describe("Lex_Send_Message", () => {
         const recordData: Record = {
             UUID: "12313",
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             name: "TestName",

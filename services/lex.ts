@@ -161,7 +161,7 @@ async function get_intent_utterance(
     //Create a command for get the description of the given intent using the found id
     const descriptionCommand = new DescribeIntentCommand({
         botId: process.env.BOT_ID ?? "",
-        localeId: process.env.LOCALE_ID ?? "en_GB",
+        localeId: language ?? "en_GB",
         botVersion: process.env.BOT_VERSION ?? "",
         intentId: id,
     });
