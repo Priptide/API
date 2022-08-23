@@ -4,6 +4,7 @@ import { Server } from "http";
 import { connection } from "mongoose";
 import actions from "./routes/actions";
 import lex_routes from "./routes/lex";
+import record_routes from "./routes/record";
 import router from "./routes/routes";
 
 //server setup
@@ -23,6 +24,9 @@ export function start_server(): Server {
 
     //Add lex too the routes
     app.use("/lex", lex_routes);
+
+    //Add record too the routes
+    app.use("/record", record_routes);
 
     //Setup routing for errors
     app.use((error: any, req: any, res: any, next: any) => {
