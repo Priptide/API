@@ -1,6 +1,7 @@
 import RecordModel, { Record } from "../../../models/record";
-import mongoTesting from "../../../utils/mongoTesting";
+
 import RecordService from "../../record";
+import mongoTesting from "../../../utils/mongoTesting";
 
 describe("Record_Update", () => {
     /**

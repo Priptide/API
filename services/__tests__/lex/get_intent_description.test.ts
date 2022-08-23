@@ -1,6 +1,7 @@
 import RecordModel, { Record } from "../../../models/record";
-import mongoTesting from "../../../utils/mongoTesting";
+
 import LexService from "../../lex";
+import mongoTesting from "../../../utils/mongoTesting";
 
 describe("Lex_Get_Intent_Utterance", () => {
     /**
@@ -23,17 +24,18 @@ describe("Lex_Get_Intent_Utterance", () => {
 
     test("Get FallBackIntent utterance", async () => {
         try {
-            const intent = "How_to_Set_Home_Waypoints_and_Favourite_Locations_Using_SYNC_2";
-            const expectedUtterance = "How to Set Home, Waypoints and Favourite Locations Using SYNC 2";
+            const intent =
+                "How_to_Set_Home_Waypoints_and_Favourite_Locations_Using_SYNC_2";
+            const expectedUtterance =
+                "How to Set Home, Waypoints and Favourite Locations Using SYNC 2";
             //Try send with empty message
             const utterance = await LexService.get_intent_utterance(intent);
 
-            // Expect the description 
+            // Expect the description
             expect(utterance).toBe(expectedUtterance);
         } catch (error: any) {
             //Check we have sent the expect error
             console.log(error.message);
         }
     });
-
 });

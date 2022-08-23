@@ -1,5 +1,5 @@
-import express from "express";
 import RecordService from "../services/record";
+import express from "express";
 
 //Setup a router
 const record_routes = express.Router();
@@ -35,7 +35,7 @@ record_routes.post("/update", async (req, res, next) => {
     }
 });
 
-//Route for getting your current message record from lex
+//Route for getting your most recent record from lex
 record_routes.post("/get", async (req, res, next) => {
     try {
         //Using a the uuid provided we want to get the most recent record

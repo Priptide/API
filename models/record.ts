@@ -1,4 +1,4 @@
-import mongoose, { Model, model, Types } from "mongoose";
+import mongoose, { Model, Types, model } from "mongoose";
 const { Schema } = mongoose;
 
 export interface Record {
