@@ -101,7 +101,7 @@ async function find_or_create(
 
 //Deleting records if message is empty || conversation is older than a day
 async function delete_allrecords() {
-    //if()
+    if(last_active > )
     await RecordModel.deleteMany({ is_active: false });
 }
 //allows us to delete by userid

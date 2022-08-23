@@ -50,12 +50,13 @@ lex_routes.post("/send", async (req, res, next) => {
         next(error);
     }
 });
-
+// delete records if unactive for 24 hours, or empty
 lex_routes.delete("/deleteall", async (req, res) => {
     await RecordService.delete_allrecords();
     res.send({ message: "Unactive records removed." });
 });
 
+//delete record if user askes
 lex_routes.delete("/delete/:uuid", async (req, res) => {
     await RecordService.delete_record(req.params.uuid);
     res.status(200).json("Successful deleting ");
