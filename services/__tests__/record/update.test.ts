@@ -231,7 +231,7 @@ describe("Record_Update", () => {
 
     //Updating with session and uuid and valid session
     test("update valid record", async () => {
-        //Create record data as inactive
+        //Create record data as active
         const record_model: Record = {
             UUID: "test_uuid",
             chat: {
@@ -284,7 +284,7 @@ describe("Record_Update", () => {
 
     //Updating with session and uuid and valid session - existing messages (USER)
     test("update record with existing message - USER", async () => {
-        //Create record data as inactive
+        //Create record data as active
         const record_model: Record = {
             UUID: "test_uuid",
             chat: {
@@ -349,7 +349,7 @@ describe("Record_Update", () => {
 
     //Updating with session and uuid and valid session - existing messages (BOT)
     test("update record with existing message - BOT", async () => {
-        //Create record data as inactive
+        //Create record data as active
         const record_model: Record = {
             UUID: "test_uuid",
             chat: {
@@ -414,7 +414,7 @@ describe("Record_Update", () => {
 
     //Updating with session and uuid and valid session - using language and name
     test("send invalid message", async () => {
-        //Create record data as inactive
+        //Create record data as active
         const record_model: Record = {
             UUID: "test_uuid",
             chat: {
