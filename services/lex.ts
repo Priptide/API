@@ -23,6 +23,12 @@ export enum State {
     CONFIRMED = "Confirmed",
     DENIED = "Denied",
     NONE = "None",
+}    
+
+//Check a string provided is a valid language
+function checkValidLanguage(language: string): boolean {
+    const supported_languages = ["en_GB", "de_DE", "fr_FR", "es_ES", "it_IT"];
+    return supported_languages.includes(language);
 }
 
 //Return the full list of possible intents
@@ -40,6 +46,9 @@ async function send_message(
 
     //Check we have a session id
     if (!sessionId) throw new Error("Missing session id");
+
+    // Throw error if invalid language is passed 
+    if (language && !checkValidLanguage(language)) throw new Error("Invalid language");
 
     //Get the current record
     const record = await RecordModel.findOne({ session_id: sessionId });
@@ -145,6 +154,13 @@ async function get_intent_utterance(
     name: string,
     language?: string
 ): Promise<AlternateButton | undefined> {
+
+    // Throw error if no name is passed
+    if (!name) throw new Error("Empty name");
+
+    // Throw error if invalid language is passed
+    if (language && !checkValidLanguage(language)) throw new Error("Invalid language");
+
     //Create a client for using the lex model API
     const client = modelLexClient();
 
@@ -188,7 +204,7 @@ async function get_intent_utterance(
     //Create a command for get the description of the given intent using the found id
     const descriptionCommand = new DescribeIntentCommand({
         botId: process.env.BOT_ID ?? "",
-        localeId: process.env.LOCALE_ID ?? "",
+        localeId: language ?? "en_GB",
         botVersion: process.env.BOT_VERSION ?? "",
         intentId: id,
     });
