@@ -16,6 +16,16 @@ export interface AlternateButton {
     url?: string;
 }
 
+//Create an enum for the possible lex states
+export enum State {
+    FALLBACK = "Fallback",
+    WAITING_FOR_RESPONSE = "WaitingForResponse",
+    CONFIRMED = "Confirmed",
+    DENIED = "Denied",
+    NONE = "None",
+}    
+
+//Check a string provided is a valid language
 function checkValidLanguage(language: string): boolean {
     const supported_languages = ["en_GB", "de_DE", "fr_FR", "es_ES", "it_IT"];
     return supported_languages.includes(language);
@@ -29,6 +39,7 @@ async function send_message(
 ): Promise<{
     message: { text: string; time: Date };
     alternateButtons: AlternateButton[];
+    state: State;
 }> {
     //Check we have a valid message
     if (!message) throw new Error("No valid message");
@@ -64,12 +75,43 @@ async function send_message(
     const interpretations = data["interpretations"];
     var local_message;
     var timestamp;
+    var type;
+    var confirmationState;
+    var state: State = State.NONE;
 
     //Add user message to our record.
     record.add_message(false, message);
 
     if (data["messages"]) {
         local_message = data["messages"][0]["content"] ?? "";
+
+        //Check we have a session state
+        if (data["sessionState"]) {
+            //Set the current message state
+            if (data["sessionState"]["dialogAction"])
+                type = data["sessionState"]["dialogAction"]["type"] ?? "";
+
+            //Set the confirmation state
+            if (data["sessionState"]["intent"])
+                confirmationState =
+                    data["sessionState"]["intent"]["confirmationState"] ?? "";
+
+            //Assuming we have both states then we can setup the overall state
+            if (type == "ConfirmIntent") {
+                state = State.WAITING_FOR_RESPONSE;
+            } else {
+                switch (confirmationState) {
+                    case "Confirmed":
+                        state = State.CONFIRMED;
+                        break;
+                    case "Denied":
+                        state = State.DENIED;
+                        break;
+                    default:
+                        state = State.FALLBACK;
+                }
+            }
+        }
 
         //Add lex message too our record.
         timestamp = record.add_message(true, local_message);
@@ -103,6 +145,7 @@ async function send_message(
     return {
         message: { text: local_message ?? "", time: timestamp },
         alternateButtons: alternateButtons ?? [],
+        state: state,
     };
 }
 

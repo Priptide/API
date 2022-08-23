@@ -17,17 +17,19 @@ lex_routes.post("/send", async (req, res, next) => {
         );
 
         //Get all possible intentions.
-        const { message, alternateButtons } = await LexService.send_message(
-            req.body.message ?? "",
-            session_id,
-            req.body.language ?? "en_GB"
-        );
+        const { message, alternateButtons, state } =
+            await LexService.send_message(
+                req.body.message ?? "",
+                session_id,
+                req.body.language ?? "en_GB"
+            );
 
         //If there is a message send it back or return an error otherwise.
         if (message) {
             res.status(200).json({
                 uuid: uuid,
                 session_id: session_id,
+                state: state,
                 message: message,
                 alternateButtons: alternateButtons,
             });
