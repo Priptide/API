@@ -136,7 +136,7 @@ async function send_message(
     return {
         message: { text: local_message ?? "", time: timestamp },
         alternateButtons: alternateButtons ?? [],
-        state: state ?? "",
+        state: state,
     };
 }
 
