@@ -3,4 +3,5 @@
     "editor.codeActionsOnSave": {
         "source.sortMembers": true
     },
+    "jest.autoRun": "off",
 }

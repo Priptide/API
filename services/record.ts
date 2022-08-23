@@ -1,6 +1,7 @@
 import RecordModel, { Record } from "../models/record";
 import { generateSessionId, generateUUID } from "../utils/cryptoGeneration";
 import { Types } from "mongoose";
+import record from "../models/record";
 
 //Inserting a record
 async function create(
@@ -98,10 +99,9 @@ async function find_or_create(
         return create(language, undefined, name);
     }
 }
-
 //Deleting records if message is empty || conversation is older than a day
 async function delete_allrecords() {
-    if(last_active > )
+    //if(last_active > )
     await RecordModel.deleteMany({ is_active: false });
 }
 //allows us to delete by userid

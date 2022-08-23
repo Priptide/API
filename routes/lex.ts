@@ -1,6 +1,6 @@
-import express from "express";
 import LexService from "../services/lex";
 import RecordService from "../services/record";
+import express from "express";
 
 //Setup a router
 const lex_routes = express.Router();
@@ -17,7 +17,7 @@ lex_routes.post("/send", async (req, res, next) => {
         );
 
         //Get all possible intentions.
-        const { message, interpretations } = await LexService.send_message(
+        const { message, alternateButtons } = await LexService.send_message(
             req.body.message ?? "",
             session_id,
             req.body.language ?? "en_GB"
@@ -29,7 +29,7 @@ lex_routes.post("/send", async (req, res, next) => {
                 uuid: uuid,
                 session_id: session_id,
                 message: message,
-                intentions: interpretations,
+                alternateButtons: alternateButtons,
             });
         } else {
             res.status(500).json({
@@ -60,6 +60,31 @@ lex_routes.delete("/deleteall", async (req, res) => {
 lex_routes.delete("/delete/:uuid", async (req, res) => {
     await RecordService.delete_record(req.params.uuid);
     res.status(200).json("Successful deleting ");
+});
+
+//This route is used to end an active lex session
+lex_routes.post("/end", async (req, res, next) => {
+    try {
+        //Attempt to end the current session
+        await LexService.end_session(req.body.session_id, req.body.uuid);
+
+        //Assuming this is done we just return a successful result
+        res.status(200).json({
+            message: "Operation completed successfully",
+        });
+    } catch (error: any) {
+        //Check if it is a known error.
+        if (error.message == "Missing session id") {
+            error.status = 401;
+        } else if (error.message == "No valid UUID") {
+            error.status = 401;
+        } else if (error.message == "Record not found") {
+            error.status = 401;
+        }
+
+        //Move too the next value.
+        next(error);
+    }
 });
 
 //Export routes for lex
