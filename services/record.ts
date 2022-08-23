@@ -117,6 +117,8 @@ async function delete_allrecords() {
                 await RecordModel.deleteMany({});
             }
         }
+    } else {
+        throw new Error("No records found");
     }
 }
 //allows us to delete by userid
