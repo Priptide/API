@@ -24,6 +24,7 @@ async function send_message(
 ): Promise<{
     message: { text: string; time: Date };
     alternateButtons: AlternateButton[];
+    state: string;
 }> {
     //Check we have a valid message
     if (!message) throw new Error("No valid message");
@@ -56,12 +57,22 @@ async function send_message(
     const interpretations = data["interpretations"];
     var local_message;
     var timestamp;
+    var state;
 
     //Add user message to our record.
     record.add_message(false, message);
 
     if (data["messages"]) {
         local_message = data["messages"][0]["content"] ?? "";
+
+        //Check we have a session state
+        if (data["sessionState"]) {
+            //Set the current message state
+            if (data["sessionState"]["dialogAction"])
+                state = data["sessionState"]["dialogAction"]["type"] ?? "";
+
+            console.log(data["sessionState"]["intent"]);
+        }
 
         //Add lex message too our record.
         timestamp = record.add_message(true, local_message);
@@ -95,6 +106,7 @@ async function send_message(
     return {
         message: { text: local_message ?? "", time: timestamp },
         alternateButtons: alternateButtons ?? [],
+        state: state ?? "",
     };
 }
 
