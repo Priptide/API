@@ -1,6 +1,6 @@
 import RecordModel, { Record } from "../../../models/record";
 import mongoTesting from "../../../utils/mongoTesting";
-import LexService, { AlternateButton } from "../../lex";
+import LexService from "../../lex";
 
 describe("Lex_Send_Message", () => {
     /**

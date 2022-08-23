@@ -1,6 +1,6 @@
-import express from "express";
 import LexService from "../services/lex";
 import RecordService from "../services/record";
+import express from "express";
 
 //Setup a router
 const lex_routes = express.Router();
@@ -43,6 +43,31 @@ lex_routes.post("/send", async (req, res, next) => {
         } else if (error.message == "No valid message") {
             error.status = 401;
         } else if (error.message == "Invalid session id") {
+            error.status = 401;
+        }
+
+        //Move too the next value.
+        next(error);
+    }
+});
+
+//This route is used to end an active lex session
+lex_routes.post("/end", async (req, res, next) => {
+    try {
+        //Attempt to end the current session
+        await LexService.end_session(req.body.session_id, req.body.uuid);
+
+        //Assuming this is done we just return a successful result
+        res.status(200).json({
+            message: "Operation completed successfully",
+        });
+    } catch (error: any) {
+        //Check if it is a known error.
+        if (error.message == "Missing session id") {
+            error.status = 401;
+        } else if (error.message == "No valid UUID") {
+            error.status = 401;
+        } else if (error.message == "Record not found") {
             error.status = 401;
         }
 
