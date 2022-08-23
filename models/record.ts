@@ -77,7 +77,7 @@ recordSchema.method(
 
 recordSchema.method("last_active", function (): Date {
     //Check the length of messages is greater than zero if not return when the document was created
-    if (this.chat.conversation.length == 0) this._id.getTimestamp();
+    if (this.chat.conversation.length == 0) return this._id.getTimestamp();
 
     //Find the last message we have added
     const final_message: Message =
