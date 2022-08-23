@@ -16,6 +16,15 @@ export interface AlternateButton {
     url?: string;
 }
 
+//Create an enum for the possible lex states
+export enum State {
+    FALLBACK = "Fallback",
+    WAITING_FOR_RESPONSE = "WaitingForResponse",
+    CONFIRMED = "Confirmed",
+    DENIED = "Denied",
+    NONE = "None",
+}
+
 //Return the full list of possible intents
 async function send_message(
     message: string,
@@ -24,7 +33,7 @@ async function send_message(
 ): Promise<{
     message: { text: string; time: Date };
     alternateButtons: AlternateButton[];
-    state: string;
+    state: State;
 }> {
     //Check we have a valid message
     if (!message) throw new Error("No valid message");
@@ -57,7 +66,9 @@ async function send_message(
     const interpretations = data["interpretations"];
     var local_message;
     var timestamp;
-    var state;
+    var type;
+    var confirmationState;
+    var state: State = State.NONE;
 
     //Add user message to our record.
     record.add_message(false, message);
@@ -69,9 +80,28 @@ async function send_message(
         if (data["sessionState"]) {
             //Set the current message state
             if (data["sessionState"]["dialogAction"])
-                state = data["sessionState"]["dialogAction"]["type"] ?? "";
+                type = data["sessionState"]["dialogAction"]["type"] ?? "";
 
-            console.log(data["sessionState"]["intent"]);
+            //Set the confirmation state
+            if (data["sessionState"]["intent"])
+                confirmationState =
+                    data["sessionState"]["intent"]["confirmationState"] ?? "";
+
+            //Assuming we have both states then we can setup the overall state
+            if (type == "ConfirmIntent") {
+                state = State.WAITING_FOR_RESPONSE;
+            } else {
+                switch (confirmationState) {
+                    case "Confirmed":
+                        state = State.CONFIRMED;
+                        break;
+                    case "Denied":
+                        state = State.DENIED;
+                        break;
+                    default:
+                        state = State.FALLBACK;
+                }
+            }
         }
 
         //Add lex message too our record.
