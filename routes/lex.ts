@@ -57,7 +57,7 @@ lex_routes.delete("/deleteall", async (req, res) => {
 });
 
 lex_routes.delete("/delete/:uuid", async (req, res) => {
-    await RecordService.delete_record(req.body.uuid);
+    await RecordService.delete_record(req.params.uuid);
     res.status(200).json("Successful deleting ");
 });
 

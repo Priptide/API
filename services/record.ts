@@ -99,14 +99,15 @@ async function find_or_create(
     }
 }
 
-//Deleting records
+//Deleting records if message is empty || conversation is older than a day
 async function delete_allrecords() {
+    //if()
     await RecordModel.deleteMany({ is_active: false });
 }
 //allows us to delete by userid
 async function delete_record(uuid?: string) {
     if (uuid) {
-        await RecordModel.deleteOne({ UUID: uuid });
+        await RecordModel.deleteMany({ UUID: uuid });
     } else {
         console.log("record missing");
     }
