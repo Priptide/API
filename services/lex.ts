@@ -23,7 +23,7 @@ export enum State {
     CONFIRMED = "Confirmed",
     DENIED = "Denied",
     NONE = "None",
-}    
+}
 
 //Check a string provided is a valid language
 function checkValidLanguage(language: string): boolean {
@@ -47,8 +47,9 @@ async function send_message(
     //Check we have a session id
     if (!sessionId) throw new Error("Missing session id");
 
-    // Throw error if invalid language is passed 
-    if (language && !checkValidLanguage(language)) throw new Error("Invalid language");
+    // Throw error if invalid language is passed
+    if (language && !checkValidLanguage(language))
+        throw new Error("Invalid language");
 
     //Get the current record
     const record = await RecordModel.findOne({ session_id: sessionId });
@@ -143,7 +144,10 @@ async function send_message(
 
     //Return the messages and list of alternative options
     return {
-        message: { text: local_message ?? "", time: timestamp },
+        message: {
+            text: local_message ?? "",
+            time: timestamp ?? new Date(Date.now()),
+        },
         alternateButtons: alternateButtons ?? [],
         state: state,
     };
@@ -154,12 +158,12 @@ async function get_intent_utterance(
     name: string,
     language?: string
 ): Promise<AlternateButton | undefined> {
-
     // Throw error if no name is passed
     if (!name) throw new Error("Empty name");
 
     // Throw error if invalid language is passed
-    if (language && !checkValidLanguage(language)) throw new Error("Invalid language");
+    if (language && !checkValidLanguage(language))
+        throw new Error("Invalid language");
 
     //Create a client for using the lex model API
     const client = modelLexClient();

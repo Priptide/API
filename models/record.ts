@@ -23,7 +23,7 @@ export interface Message {
 }
 
 interface RecordMethods {
-    add_message(is_bot: boolean, message: string): any;
+    add_message(is_bot: boolean, message: string): Date;
     last_active(): Date;
 }
 
