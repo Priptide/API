@@ -1,7 +1,7 @@
 import RecordModel, { Chat, Record } from "../models/record";
 import { generateSessionId, generateUUID } from "../utils/cryptoGeneration";
+
 import { Types } from "mongoose";
-import record from "../models/record";
 
 //Inserting a record
 async function create(
@@ -13,7 +13,7 @@ async function create(
     const data: Record = {
         UUID: uuid ? uuid : await generateUUID(),
         chat: {
-            language: language ? language : "en_gb",
+            language: language ? language : "en_GB",
             conversation: [],
         },
         name: name ? name : "",
@@ -72,12 +72,27 @@ async function find_or_create(
             //If we can't find the record or it is now currently inactive then return a new record.
             if (!lookup_record || !lookup_record.is_active)
                 return create(language, uuid, name);
-            else
+            else {
+                //Check if the language changed
+                if (language && language != lookup_record.chat.language) {
+                    lookup_record.chat.language = language;
+                }
+
+                //Check if the name has changed
+                if (name && name != lookup_record.name) {
+                    lookup_record.name = name;
+                }
+
+                //Update record in case of change
+                await lookup_record.save();
+
+                //Return information on record
                 return {
                     id: lookup_record._id,
                     session_id: session_id,
                     uuid: uuid,
                 };
+            }
         } else {
             //Try and find an active record by the user
             const lookup_record = await RecordModel.findOne({
@@ -87,20 +102,34 @@ async function find_or_create(
 
             //If we can't find any active record then create a new active record.
             if (!lookup_record) return create(language, uuid, name);
-            else
+            else {
+                //Check if the language changed
+                if (language && language != lookup_record.chat.language) {
+                    lookup_record.chat.language = language;
+                }
+
+                //Check if the name has changed
+                if (name && name != lookup_record.name) {
+                    lookup_record.name = name;
+                }
+
+                //Update record in case of change
+                await lookup_record.save();
+
                 return {
                     id: lookup_record._id,
                     session_id: lookup_record.session_id,
                     uuid: uuid,
                 };
+            }
         }
     } else {
         //If not create and return a new record
         return create(language, undefined, name);
     }
 }
-//Deleting records if message is empty || conversation is older than a day
-async function delete_allrecords() {
+//Deleting records if message is empty or it was last active over a day ago
+async function clean_inactive_records() {
     const records = await RecordModel.find();
 
     if (records.length == 0) throw new Error("No records found");
@@ -121,7 +150,7 @@ async function delete_allrecords() {
         throw new Error("No records found 1 ");
     }
 }
-//allows us to delete by userid
+//allows us to delete by UUID
 async function delete_record(uuid?: string) {
     if (uuid) {
         await RecordModel.deleteMany({ UUID: uuid });
@@ -235,7 +264,7 @@ export default {
     find_record,
     find_byId_record,
     find_or_create,
-    delete_allrecords,
+    clean_inactive_records,
     delete_record,
     update_record,
     get_by_uuid,

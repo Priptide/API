@@ -26,7 +26,7 @@ describe("Record_Delete", () => {
     test("get with no past records", async () => {
         try {
             //Try send with no record and valid uuid
-            await RecordService.delete_allrecords();
+            await RecordService.clean_inactive_records();
 
             // Fail test if above expression doesn't throw anything.
             expect(true).toBe(false);
@@ -59,7 +59,7 @@ describe("Record_Delete", () => {
             await new RecordModel(record_model).save();
 
             //Try send with valid uuid
-            await RecordService.delete_allrecords();
+            await RecordService.clean_inactive_records();
 
             // Fail test if above expression doesn't throw anything.
             expect(false).toBe(false);
@@ -92,7 +92,7 @@ describe("Record_Delete", () => {
 
         expect(records.length).toBe(1);
 
-        await RecordService.delete_allrecords();
+        await RecordService.clean_inactive_records();
 
         const updated_record = await RecordModel.find({
             UUID: init_record.UUID,
