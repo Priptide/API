@@ -142,8 +142,8 @@ async function clean_inactive_records() {
         today.setDate(today.getDate() - 1);
         //Loop through each record.
         for (let i = 0; i < records.length; i++) {
-            if (records[i].last_active() > today || !records[0].is_active) {
-                await RecordModel.deleteMany({});
+            if (records[i].last_active() < today || !records[i].is_active) {
+                await RecordModel.findByIdAndDelete(records[i]._id);
             }
         }
     } else {
