@@ -68,7 +68,7 @@ describe("Lex_Send_Message", () => {
         const recordData: Record = {
             UUID: "12313",
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             name: "TestName",
@@ -82,12 +82,17 @@ describe("Lex_Send_Message", () => {
         //Send to the lex service a new message and our test session id
         const data = await LexService.send_message(
             message,
-            recordModel.session_id
+            recordModel.session_id,
+            "en_GB"
         );
 
-        //Expect data to be provided
-        expect(data).toBeDefined();
-
+        //Expect data to be of the expected type
+        expect(data).toBeTruthy();
+        expect(data.message).toBeTruthy();
+        expect(data.message.text).toBeTruthy();
+        expect(data.message.time).toBeTruthy();
+        expect(data.alternateButtons).toBeTruthy();
+        expect(data.alternateButtons.length).toBeGreaterThan(0);
         //Get our updated record
         const updatedRecord = await RecordModel.findOne({
             _id: recordModel._id,
@@ -112,4 +117,19 @@ describe("Lex_Send_Message", () => {
             expect(true).toBe(false);
         }
     });
+
+    test("Invalid language", async () => {
+        try {
+            //Try send with empty session id
+            await LexService.send_message("my_message", "test_id", "invalid_language");
+
+            // Fail test if above expression doesn't throw anything.
+            expect(true).toBe(false);
+        } catch (error: any) {
+            //Check we have sent the expect error
+            expect(error.message).toBe("Invalid language");
+        }
+    });
+
+
 });

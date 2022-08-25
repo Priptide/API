@@ -1,5 +1,6 @@
-import RecordModel, { Record } from "../models/record";
+import RecordModel, { Chat, Record } from "../models/record";
 import { generateSessionId, generateUUID } from "../utils/cryptoGeneration";
+
 import { Types } from "mongoose";
 
 //Inserting a record
@@ -127,6 +128,36 @@ async function find_or_create(
         return create(language, undefined, name);
     }
 }
+//Deleting records if message is empty or it was last active over a day ago
+async function clean_inactive_records() {
+    const records = await RecordModel.find();
+
+    if (records.length == 0) throw new Error("No records found");
+
+    //If the length is greater than 1 we need to work out which is most recent.
+    if (records.length >= 1) {
+        //Set date to yesterday
+        var today = new Date();
+
+        today.setDate(today.getDate() - 1);
+        //Loop through each record.
+        for (let i = 0; i < records.length; i++) {
+            if (records[i].last_active() > today || !records[0].is_active) {
+                await RecordModel.deleteMany({});
+            }
+        }
+    } else {
+        throw new Error("No records found 1 ");
+    }
+}
+//allows us to delete by UUID
+async function delete_record(uuid?: string) {
+    if (uuid) {
+        await RecordModel.deleteMany({ UUID: uuid });
+    } else {
+        console.log("record missing");
+    }
+}
 
 //Used to update or create and update a record for non lex related usage
 async function update_record(
@@ -167,10 +198,74 @@ async function update_record(
     };
 }
 
+//Used to find the users most recent chat, it will also mark any old active chats as inactive
+async function get_by_uuid(uuid: string) {
+    //Check the uuid isn't an empty string
+    if (!uuid) throw new Error("Invalid uuid");
+
+    //Find an records that are still active
+    const records = await RecordModel.find({ UUID: uuid, is_active: true });
+
+    //If we can't find any records then throw an error
+    if (records.length == 0) throw new Error("No records found");
+
+    //Setup empty variables for the chat and session id
+    var session_id: string;
+    var chat: Chat;
+    var name: string;
+
+    //If the length is greater than 1 we need to work out which is most recent.
+    if (records.length > 1) {
+        //Set the first element last active as an initial state.
+        var last_active_max = records[0].last_active();
+        var last_active_record = records[0];
+
+        //Loop through each record.
+        for (let i = 1; i < records.length; i++) {
+            //Get the time they were last active.
+            const last_active = records[i].last_active();
+
+            //Check if this record is the first active or was active more recently.
+            if (!last_active_max || last_active > last_active_max) {
+                //Update as the new max.
+                last_active_max = last_active;
+
+                //If there was a previous record then set it too inactive and save.
+                if (last_active_record) {
+                    last_active_record.is_active = false;
+                    await last_active_record.save();
+                }
+
+                //Update the last active record too this record.
+                last_active_record = records[i];
+            } else {
+                //If not then we want to set this record to inactive and save it.
+                records[i].is_active = false;
+                await records[i].save();
+            }
+        }
+        //Get the session id and chat params from the newest record
+        session_id = last_active_record.session_id;
+        chat = last_active_record.chat;
+        name = last_active_record.name ?? "";
+    } else {
+        //Set the session id and chat params
+        session_id = records[0].session_id;
+        chat = records[0].chat;
+        name = records[0].name ?? "";
+    }
+
+    //Return the uuid, session id and chat (language and messages)
+    return { session_id: session_id, uuid: uuid, chat: chat, name: name };
+}
+
 export default {
     create,
     find_record,
     find_byId_record,
     find_or_create,
+    clean_inactive_records,
+    delete_record,
     update_record,
+    get_by_uuid,
 };

@@ -1,8 +1,7 @@
-import mongoTesting from "../../../utils/mongoTesting";
+import RecordModel, { Record } from "../../../models/record";
 
 import RecordService from "../../record";
-
-import RecordModel, { Record } from "../../../models/record";
+import mongoTesting from "../../../utils/mongoTesting";
 
 describe("Record_Create", () => {
     /**
@@ -35,7 +34,7 @@ describe("Record_Create", () => {
             _id: id,
             UUID: uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: session_id,
@@ -67,7 +66,7 @@ describe("Record_Create", () => {
             _id: id,
             UUID: uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: session_id,
@@ -100,7 +99,7 @@ describe("Record_Create", () => {
             _id: id,
             UUID: uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: session_id,
@@ -119,7 +118,7 @@ describe("Record_Create", () => {
         const test_record: Record = {
             UUID: test_uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: "test_session",
@@ -156,7 +155,7 @@ describe("Record_Create", () => {
         const test_record: Record = {
             UUID: test_uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: "test_session",
@@ -191,7 +190,7 @@ describe("Record_Create", () => {
             _id: id,
             UUID: uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: session_id,
@@ -213,7 +212,7 @@ describe("Record_Create", () => {
         const test_record: Record = {
             UUID: test_uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: test_session_id,
@@ -258,7 +257,7 @@ describe("Record_Create", () => {
         const test_record: Record = {
             UUID: test_uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: test_session_id,
@@ -294,7 +293,7 @@ describe("Record_Create", () => {
             _id: id,
             UUID: uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: session_id,
@@ -334,7 +333,7 @@ describe("Record_Create", () => {
             _id: id,
             UUID: uuid,
             chat: {
-                language: "en_gb",
+                language: "en_GB",
                 conversation: [],
             },
             session_id: session_id,

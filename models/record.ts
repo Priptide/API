@@ -1,4 +1,4 @@
-import mongoose, { Model, model, Types } from "mongoose";
+import mongoose, { Model, Types, model } from "mongoose";
 const { Schema } = mongoose;
 
 export interface Record {
@@ -23,7 +23,8 @@ export interface Message {
 }
 
 interface RecordMethods {
-    add_message(is_bot: boolean, message: string): any;
+    add_message(is_bot: boolean, message: string): Date;
+    last_active(): Date;
 }
 
 type RecordModel = Model<Record, {}, RecordMethods>;
@@ -73,5 +74,17 @@ recordSchema.method(
         return local_message.time;
     }
 );
+
+recordSchema.method("last_active", function (): Date {
+    //Check the length of messages is greater than zero if not return when the document was created
+    if (this.chat.conversation.length == 0) return this._id.getTimestamp();
+
+    //Find the last message we have added
+    const final_message: Message =
+        this.chat.conversation[this.chat.conversation.length - 1];
+
+    //Return the time of this message
+    return final_message.time;
+});
 
 export default model<Record, RecordModel>("Record", recordSchema);
