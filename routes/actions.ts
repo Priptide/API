@@ -38,11 +38,11 @@ actions_routes.post("/testdrive-click", async (req, res, next) => {
     }
 });
 
-actions_routes.post("/book-service-click", async (req, res, next) => {
+actions_routes.post("/model-comparison-click", async (req, res, next) => {
     try {
         //Create or update the current record with the users input message
         const { session_id, uuid } = await RecordService.update_record(
-            "Book a Service",
+            "Model comparison",
             false,
             req.body.uuid,
             req.body.session_id,
@@ -52,7 +52,7 @@ actions_routes.post("/book-service-click", async (req, res, next) => {
 
         //Update what the bot replies
         await RecordService.update_record(
-            "https://www.ford.co.uk/support/book-a-service/dealer-step",
+            "http://www.compare.ford.co.uk/new-company-car/range?kee=872822",
             false,
             uuid,
             session_id,
@@ -61,7 +61,7 @@ actions_routes.post("/book-service-click", async (req, res, next) => {
         );
         res.status(200).json({
             message:
-                "https://www.ford.co.uk/support/book-a-service/dealer-step",
+                "http://www.compare.ford.co.uk/new-company-car/range?kee=872822",
             uuid: uuid,
             session_id: session_id,
         });
