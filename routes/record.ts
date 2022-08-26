@@ -63,13 +63,13 @@ record_routes.post("/get", async (req, res, next) => {
 });
 
 // delete records if inactive for 24 hours, or empty
-record_routes.delete("/clean", async (req, res) => {
+record_routes.post("/clean", async (req, res) => {
     await RecordService.clean_inactive_records();
     res.send({ message: "Inactive records removed." });
 });
 
 //delete record if user asks
-record_routes.delete("/delete/:uuid", async (req, res) => {
+record_routes.post("/delete/:uuid", async (req, res) => {
     await RecordService.delete_record(req.params.uuid);
     res.status(200).json("Successful deleting ");
 });
