@@ -62,6 +62,8 @@ actions_routes.post("/model-comparison-click", async (req, res, next) => {
         res.status(200).json({
             message:
                 "http://www.compare.ford.co.uk/new-company-car/range?kee=872822",
+            uuid: uuid,
+            session_id: session_id,
         });
     } catch (error: any) {
         //Check if it is a known error.
@@ -93,6 +95,8 @@ actions_routes.post("/price-comp-click", async (req, res, next) => {
 
         res.status(200).json({
             message: "http://www.compare.ford.co.uk/home?kee=380519",
+            uuid: uuid,
+            session_id: session_id,
         });
     } catch (error: any) {
         //Check if it is a known error.
