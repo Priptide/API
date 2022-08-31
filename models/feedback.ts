@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
 
 export interface Feedback {
-    _id: Types.ObjectId;
+    _id?: Types.ObjectId;
     score: number;
     comment?: string;
     session_id: string;
