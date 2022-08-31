@@ -56,8 +56,8 @@ async function average_score(): Promise<number> {
         (feedback: Feedback) => (score_total += feedback.score)
     );
 
-    //Return the average score
-    return score_total / all_feedback.length;
+    //Return the average score avoiding zero division.
+    return score_total / Math.max(all_feedback.length, 1);
 }
 
 export default { create_feedback, average_score };
