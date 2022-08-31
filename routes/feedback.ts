@@ -38,3 +38,6 @@ feedback_routes.post("/send", async (req, res, next) => {
 
 //Route for getting the current feedback statistics.
 feedback_routes.get("/stats", async (req, res, next) => {});
+
+//Export the routes
+export default feedback_routes;
