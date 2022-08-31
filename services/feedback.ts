@@ -36,7 +36,7 @@ async function create_feedback(
     };
 
     //Save this model too the database
-    const saved_obj = await new RecordModel(new_feedback).save();
+    const saved_obj = await new FeedbackModel(new_feedback).save();
 
     //Return the feedback object
     return saved_obj;
