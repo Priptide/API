@@ -37,7 +37,20 @@ feedback_routes.post("/send", async (req, res, next) => {
 });
 
 //Route for getting the current feedback statistics.
-feedback_routes.get("/stats", async (req, res, next) => {});
+feedback_routes.get("/stats", async (req, res, next) => {
+    try {
+        //Get the average score
+        const avg_score = await FeedbackService.average_score();
+
+        //Try send the average score back too the request
+        res.status(200).json({
+            average: avg_score,
+        });
+    } catch (error: any) {
+        //Move too the next value.
+        next(error);
+    }
+});
 
 //Export the routes
 export default feedback_routes;

@@ -1,13 +1,14 @@
 import FeedbackModel, { Feedback } from "../models/feedback";
 
 import RecordModel from "../models/record";
+import { Types } from "mongoose";
 
 //Function for creating feedback
 async function create_feedback(
     score: number,
     session_id: string,
     comment?: string
-) {
+): Promise<Types.ObjectId> {
     //Check the score is between 0 and 5.
     if (score < 0 || score > 5) throw new Error("Invalid score");
 
@@ -38,8 +39,25 @@ async function create_feedback(
     //Save this model too the database
     const saved_obj = await new FeedbackModel(new_feedback).save();
 
-    //Return the feedback object
-    return saved_obj;
+    //Return the feedback object id
+    return saved_obj._id;
 }
 
-export default { create_feedback };
+//Get the average score of a user
+async function average_score(): Promise<number> {
+    //Find all the feedback data
+    const all_feedback = await FeedbackModel.find({});
+
+    //Setup a variable for the total score
+    var score_total = 0;
+
+    //Loop through each document and add their score too the total
+    all_feedback.forEach(
+        (feedback: Feedback) => (score_total += feedback.score)
+    );
+
+    //Return the average score
+    return score_total / all_feedback.length;
+}
+
+export default { create_feedback, average_score };
