@@ -10,7 +10,7 @@ export interface Feedback {
 const feedbackSchema = new Schema<Feedback>({
     score: { type: Number, required: true },
     comment: String,
-    session_id: String,
+    session_id: { type: String, required: true, unique: true },
 });
 
 export default model<Feedback>("Feedback", feedbackSchema);
