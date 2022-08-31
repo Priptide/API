@@ -100,6 +100,11 @@ async function send_message(
             //Assuming we have both states then we can setup the overall state
             if (type == "ConfirmIntent") {
                 state = State.WAITING_FOR_RESPONSE;
+            } else if (
+                data["sessionState"]["intent"] &&
+                data["sessionState"]["intent"]["name"] == "FallbackIntent"
+            ) {
+                state = State.FALLBACK;
             } else {
                 switch (confirmationState) {
                     case "Confirmed":
@@ -109,7 +114,7 @@ async function send_message(
                         state = State.DENIED;
                         break;
                     default:
-                        state = State.FALLBACK;
+                        state = State.NONE;
                 }
             }
         }
