@@ -225,7 +225,7 @@ async function get_intent_utterance(
     if (!response.sampleUtterances || !response.sampleUtterances[0].utterance)
         return;
 
-    //Check that a url is attached too the response object
+    //Check that a url is attached too the response object and contains a url
     if (
         !response.fulfillmentCodeHook ||
         !response.fulfillmentCodeHook.postFulfillmentStatusSpecification ||
@@ -236,7 +236,10 @@ async function get_intent_utterance(
         response.fulfillmentCodeHook.postFulfillmentStatusSpecification
             .successResponse.messageGroups.length == 0 ||
         !response.fulfillmentCodeHook?.postFulfillmentStatusSpecification
-            ?.successResponse?.messageGroups[0].message
+            ?.successResponse?.messageGroups[0].message ||
+        !response.fulfillmentCodeHook?.postFulfillmentStatusSpecification?.successResponse?.messageGroups[0].message.plainTextMessage?.value?.includes(
+            "https"
+        )
     )
         return;
 
