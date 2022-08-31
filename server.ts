@@ -1,7 +1,8 @@
-import cors from "cors";
-import express from "express";
 import { Server } from "http";
 import actions from "./routes/actions";
+import cors from "cors";
+import express from "express";
+import feedback_routes from "./routes/feedback";
 import lex_routes from "./routes/lex";
 import record_routes from "./routes/record";
 import router from "./routes/routes";
@@ -20,6 +21,9 @@ export function start_server(): Server {
     app.use("/api", router);
 
     app.use("/action", actions);
+
+    //Add feedback too the routes
+    app.use("/feedback", feedback_routes);
 
     //Add lex too the routes
     app.use("/lex", lex_routes);
