@@ -6,4 +6,4 @@ var myJob = new cronJob("0 0 * * *", function () {
     RecordService.clean_inactive_records();
     console.log("cron ran");
 });
-myJob.start();
+export default myJob;
