@@ -16,9 +16,11 @@
   "dependencies": {
     "@aws-sdk/client-lex-models-v2": "^3.152.0",
     "@aws-sdk/client-lex-runtime-v2": "^3.142.0",
+    "@types/cron": "^2.0.0",
     "@types/supertest": "^2.0.12",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "cron": "^2.1.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongodb": "^4.8.1",
