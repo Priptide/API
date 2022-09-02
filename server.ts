@@ -6,6 +6,7 @@ import feedback_routes from "./routes/feedback";
 import lex_routes from "./routes/lex";
 import record_routes from "./routes/record";
 import router from "./routes/routes";
+import myJob from "./services/cron/cron-job";
 
 //server setup
 export function start_server(): Server {
